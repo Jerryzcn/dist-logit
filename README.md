@@ -1,4 +1,4 @@
-# DistTensor
+# DistLogit
 
 A distributed logistic regression built from scratch.
 
