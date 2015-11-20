@@ -1,1 +1,0 @@
-Run persistently on each individual machine. In charge of scheduling and processing jobs recieved.

@@ -1,1 +1,0 @@
-Client code that sends client script to master.
