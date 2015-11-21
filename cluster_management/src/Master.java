@@ -9,4 +9,9 @@
  * on eval data.
  */
 public class Master {
+
+    public enum Config {
+        TRAINING_DATA, EVAL_DATA, MODEL_OUTPUT, LOG_PATH, REG_CONSTANT, BATCH_SIZE
+    }
+
 }
