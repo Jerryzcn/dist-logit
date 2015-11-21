@@ -17,7 +17,22 @@
       <profile default="true" name="Default" enabled="false">
         <processorPath useClasspath="true" />
       </profile>
+      <profile default="false" name="Maven default annotation processors profile" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target\generated-test-sources\test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="true" />
+        <module name="client" />
+        <module name="cluster_management" />
+        <module name="math" />
+        <module name="param_server" />
+      </profile>
     </annotationProcessing>
-    <bytecodeTargetLevel target="1.8" />
+    <bytecodeTargetLevel target="1.8">
+      <module name="client" target="1.8" />
+      <module name="cluster_management" target="1.8" />
+      <module name="math" target="1.8" />
+      <module name="param_server" target="1.8" />
+    </bytecodeTargetLevel>
   </component>
 </project>
