@@ -1,3 +1,5 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
@@ -41,7 +43,12 @@ public class ParamServer implements Runnable {
   }
 
   @Override public void run() {
+    try (BufferedInputStream inBuf = new BufferedInputStream(masterSocket.getInputStream());
+        BufferedOutputStream outBuf = new BufferedOutputStream(masterSocket.getOutputStream())) {
 
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   /** Stops the parameter server. */
