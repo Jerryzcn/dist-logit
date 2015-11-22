@@ -37,7 +37,8 @@ public class Client {
       outBuf.flush();
       // listener should be terminated by master signaling it by closing the socket.
       Thread listener = new Thread(new Runnable() {
-        @Override public void run() {
+        @Override
+        public void run() {
           byte[] buf = new byte[BUFFER_SIZE];
           try (final BufferedInputStream inBuf = new BufferedInputStream(
               masterSocket.getInputStream())) {

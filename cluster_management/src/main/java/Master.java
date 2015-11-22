@@ -15,4 +15,7 @@ public class Master {
     TRAINING_DATA, EVAL_DATA, MODEL_OUTPUT, LOG_PATH, REG_CONSTANT, BATCH_SIZE
   }
 
+  public static void main(String args[]) {
+
+  }
 }
