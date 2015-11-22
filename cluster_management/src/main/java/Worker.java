@@ -5,7 +5,11 @@
  * Launches parameter servers.
  */
 public class Worker {
+  // Connections needed: tcp from master to workers
+  //                     udp from workers to parameter servers
+
   private int workerId;
+  private boolean isStopped;
 
   public static void main(String args[]) {
 
@@ -17,5 +21,9 @@ public class Worker {
 
   public void setWorkerId(int workerId) {
     this.workerId = workerId;
+  }
+
+  public void stop(){
+
   }
 }

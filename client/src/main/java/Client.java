@@ -17,6 +17,7 @@ import java.util.Scanner;
  * worker_count = <how many worker do we want to use>
  */
 public class Client {
+  // Connections needed: tcp from client to master
 
   private final static int BUFFER_SIZE = 1024;
 
