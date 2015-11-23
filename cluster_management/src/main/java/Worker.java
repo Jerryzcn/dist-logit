@@ -5,10 +5,10 @@ import java.net.ServerSocket;
  * Created by Jerry on 11/19/2015.
  * <p>
  * Calculates the gradient vector to update the parameters.
- *
+ * <p>
  * Claimed by Andy Li
  */
-public class Worker implements Runnable{
+public class Worker implements Runnable {
   // Connections needed: tcp from master to workers
   //                     udp from workers to parameter servers
 
@@ -39,7 +39,8 @@ public class Worker implements Runnable{
     this.workerId = workerId;
   }
 
-  public void stop(){
+
+  public void stop() {
     isStopped = true;
   }
 
@@ -51,14 +52,13 @@ public class Worker implements Runnable{
     System.out.println("usage: Server port");
   }
 
-  @Override
-  public void run() {
+  @Override public void run() {
     while (!isStopped()) {
       try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
 
-      } catch (IOException e) {
-        e.printStackTrace();
+        }catch(IOException e){
+          e.printStackTrace();
+        }
       }
     }
   }
-}

@@ -24,9 +24,11 @@ public class ParamServer implements Runnable {
   /**
    * Constructs a parameter server.
    *
-   * @param workers a map of workers address to ports
-   * @param lo      the lower bound of the feature index
-   * @param hi      the upper bound of the feature index
+   * @param workers    a map of workers address to ports
+   * @param master     master's address
+   * @param masterPort master's port
+   * @param lo         the lower bound of the feature index
+   * @param hi         the upper bound of the feature index
    */
   public ParamServer(Map<InetAddress, Integer> workers, InetAddress master, int masterPort, int lo,
       int hi) throws IOException {
@@ -51,7 +53,9 @@ public class ParamServer implements Runnable {
     }
   }
 
-  /** Stops the parameter server. */
+  /**
+   * Stops the parameter server.
+   */
   public void stop() {
     isStopped = true;
     try {

@@ -5,6 +5,7 @@
  * Sends sharded training data to worker node, and the relevant information in config file using TCP.
  * Sends relevant information associate with the worker to parameter server.
  * Monitors the training loss of all the workers.
+ * Launches parameter servers.
  * Receives statistics of parameters from parameter server.
  * Periodically send updates to client.
  * Periodically send command to parameter server to write the model to disk, and evaluates the model
