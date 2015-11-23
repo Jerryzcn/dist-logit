@@ -1,7 +1,7 @@
 import java.net.InetAddress;
 
 /**
- * Created by Jerry on 11/21/2015.
+ * TODO:
  */
 public class WorkerUpdater implements Runnable {
 

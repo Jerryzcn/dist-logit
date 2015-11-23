@@ -3,10 +3,8 @@ import java.net.Socket;
 import java.util.Scanner;
 
 /**
- * Created by Jerry on 11/19/2015.
- * <p/>
- * Read the config files and pass the information to master using TCP.
- * <p/>
+ * Reads the config files and pass the information to master using TCP.
+ * <p>
  * Config file format:
  * training_data = <training data path>
  * eval_data = <eval data path>
@@ -38,8 +36,7 @@ public class Client {
       outBuf.flush();
       // listener should be terminated by master signaling it by closing the socket.
       Thread listener = new Thread(new Runnable() {
-        @Override
-        public void run() {
+        @Override public void run() {
           byte[] buf = new byte[BUFFER_SIZE];
           try (final BufferedInputStream inBuf = new BufferedInputStream(
               masterSocket.getInputStream())) {
