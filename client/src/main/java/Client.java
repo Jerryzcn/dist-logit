@@ -12,6 +12,7 @@ import java.util.Scanner;
  * log_path = <logging folder path>
  * reg_constant = <regularization constant>
  * batch_size = <the batch size of mini batch gradient descent>
+ * learning_rate = <learning rate for stochastic gradient descent>
  * worker_count = <how many worker do we want to use>
  */
 public class Client {

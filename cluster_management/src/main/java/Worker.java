@@ -1,6 +1,8 @@
 import org.nd4j.linalg.dataset.DataSet;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -73,7 +75,10 @@ public class Worker implements Runnable {
         ModelReplica model = new ModelReplica(paramServers, dataset);
         new Thread(model).start();
         isWorking = true;
+        BufferedReader buf =
+            new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
         while (isWorking) {
+          String command = buf.readLine();
           // TODO: handle requests from master and sends report back to master.
         }
         model.stop();
