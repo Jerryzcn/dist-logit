@@ -25,14 +25,11 @@
         <module name="client" />
         <module name="cluster_management" />
         <module name="math" />
-        <module name="param_server" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
-      <module name="client" target="1.5" />
-      <module name="cluster_management" target="1.5" />
-      <module name="math" target="1.5" />
-      <module name="param_server" target="1.5" />
+      <module name="client" target="1.8" />
+      <module name="math" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

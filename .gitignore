@@ -44,3 +44,7 @@ Temporary Items
 *.class
 .idea/
 mid_dataset/train.csv
+mid_dataset/test.csv
+small_dataset/
+mini_dataset/
+small_dataset/train.csv

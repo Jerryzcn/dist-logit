@@ -3,9 +3,8 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/client/client.iml" filepath="$PROJECT_DIR$/client/client.iml" />
-      <module fileurl="file://$PROJECT_DIR$/cluster_management/cluster_management.iml" filepath="$PROJECT_DIR$/cluster_management/cluster_management.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cluster_components/cluster_management.iml" filepath="$PROJECT_DIR$/cluster_components/cluster_management.iml" />
       <module fileurl="file://$PROJECT_DIR$/math/math.iml" filepath="$PROJECT_DIR$/math/math.iml" />
-      <module fileurl="file://$PROJECT_DIR$/param_server/param_server.iml" filepath="$PROJECT_DIR$/param_server/param_server.iml" />
     </modules>
   </component>
 </project>
