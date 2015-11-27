@@ -13,7 +13,11 @@ import java.util.Scanner;
  * reg_constant = <regularization constant>
  * batch_size = <the batch size of mini batch gradient descent>
  * learning_rate = <learning rate for stochastic gradient descent>
- * worker_count = <how many worker do we want to use>
+ * worker = <worker address>:<worker tcp port>
+ * worker = <worker address>:<worker tcp port>
+ * ...
+ * parameter_server = <parameter server address>:<parameter server tcp port>
+ * ...
  */
 public class Client {
   // Connections needed: tcp from client to master
