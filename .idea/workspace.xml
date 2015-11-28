@@ -2,21 +2,27 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="886f678e-0716-4f66-b947-9c4a7127e592" name="Default" comment="">
-      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/math/src/test/java/LossFuncTest.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.gitignore" afterPath="$PROJECT_DIR$/.gitignore" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/Message.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/ParameterUpdater.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/math/src/main/java/DenseLossFunction.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/math/src/main/java/DenseOptimizer.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/math/src/main/java/LossGrad.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/math/src/main/java/StochasticGradientDescent.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/math/src/test/java/L2RegLogisticDenseLossTest.java" />
+      <change type="NEW" beforePath="" afterPath="$PROJECT_DIR$/math/src/test/java/StochasticGradientDescentTest.java" />
+      <change type="DELETED" beforePath="$PROJECT_DIR$/math/src/test/java/LossFuncTest.java" afterPath="" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/compiler.xml" afterPath="$PROJECT_DIR$/.idea/compiler.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/misc.xml" afterPath="$PROJECT_DIR$/.idea/misc.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/modules.xml" afterPath="$PROJECT_DIR$/.idea/modules.xml" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math/src/main/java/LossFunc.java" afterPath="$PROJECT_DIR$/math/src/main/java/LossFunc.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cluster_management/cluster_management.iml" afterPath="$PROJECT_DIR$/cluster_components/cluster_components.iml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cluster_management/pom.xml" afterPath="$PROJECT_DIR$/cluster_components/pom.xml" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cluster_management/src/main/java/Master.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/Master.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cluster_management/src/main/java/ModelReplica.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/ModelReplica.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cluster_management/src/main/java/UpdateWorkerParams.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/UpdateWorkerParams.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/cluster_management/src/main/java/Worker.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/Worker.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/param_server/src/main/java/ParamServer.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java" />
-      <change type="MOVED" beforePath="$PROJECT_DIR$/param_server/src/main/java/WorkerUpdater.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/WorkerUpdater.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cluster_components/pom.xml" afterPath="$PROJECT_DIR$/cluster_components/pom.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cluster_components/src/main/java/Master.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/Master.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cluster_components/src/main/java/ModelReplica.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/ModelReplica.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cluster_components/src/main/java/UpdateWorkerParams.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/UpdateWorkerParams.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/cluster_components/src/main/java/Worker.java" afterPath="$PROJECT_DIR$/cluster_components/src/main/java/Worker.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/math/math.iml" afterPath="$PROJECT_DIR$/math/math.iml" />
+      <change type="MOVED" beforePath="$PROJECT_DIR$/math/src/main/java/LossFunc.java" afterPath="$PROJECT_DIR$/math/src/main/java/L2RegLogisticDenseLoss.java" />
     </list>
     <ignored path="CSE461DistLogit.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -26,6 +32,7 @@
     <ignored path="$PROJECT_DIR$/client/target/" />
     <ignored path="$PROJECT_DIR$/cluster_management/target/" />
     <ignored path="$PROJECT_DIR$/param_server/target/" />
+    <ignored path="$PROJECT_DIR$/cluster_components/target/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="TRACKING_ENABLED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -37,111 +44,18 @@
   <component name="CreatePatchCommitExecutor">
     <option name="PATCH_PATH" value="" />
   </component>
-  <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf>
-            <file leaf-file-name="loss.py" pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/math/loss.py">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state vertical-scroll-proportion="0.25925925">
-                    <caret line="15" column="82" selection-start-line="15" selection-start-column="82" selection-end-line="15" selection-end-column="82" />
-                    <folding />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
   <component name="ExecutionTargetManager" SELECTED_TARGET="default_target" />
   <component name="FavoritesManager">
     <favorites_list name="CSE461DistLogit" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="600">
-      <file leaf-file-name="Client.java" pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/client/src/main/java/Client.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.537037">
-              <caret line="41" column="73" selection-start-line="41" selection-start-column="73" selection-end-line="42" selection-end-column="47" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LossFunc.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/math/src/main/java/LossFunc.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="18" column="103" selection-start-line="18" selection-start-column="102" selection-end-line="18" selection-end-column="103" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="DataInputStream.java" pinned="false" current-in-tab="false">
-        <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/io/DataInputStream.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="194" column="0" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="LossFuncTest.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/math/src/test/java/LossFuncTest.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Master.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Master.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="1" column="6" selection-start-line="1" selection-start-column="6" selection-end-line="1" selection-end-column="6" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="ParamServer.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WorkerUpdater.java" pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/WorkerUpdater.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0">
-              <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="600" />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Class" />
         <option value="JUnit4 Test Class" />
+        <option value="Class" />
       </list>
     </option>
   </component>
@@ -161,29 +75,51 @@
         <option value="$PROJECT_DIR$/cluster_management/src/Worker.java" />
         <option value="$PROJECT_DIR$/math/start.py" />
         <option value="$PROJECT_DIR$/math/loss.py" />
-        <option value="$PROJECT_DIR$/math/math.iml" />
         <option value="$PROJECT_DIR$/param_server/src/ParamServer.java" />
         <option value="$PROJECT_DIR$/client/src/Client.java" />
         <option value="$PROJECT_DIR$/cluster_management/pom.xml" />
         <option value="$PROJECT_DIR$/param_server/pom.xml" />
         <option value="$PROJECT_DIR$/client/pom.xml" />
         <option value="C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/lang/Runnable.java" />
-        <option value="$PROJECT_DIR$/math/pom.xml" />
         <option value="$PROJECT_DIR$/param_server/src/main/java/WorkerConnection.java" />
         <option value="$PROJECT_DIR$/cluster_management/src/main/java/WorkerCourier.java" />
         <option value="$PROJECT_DIR$/cluster_management/src/main/java/WorkerControler.java" />
         <option value="$PROJECT_DIR$/cluster_management/src/main/java/WorkerController.java" />
         <option value="$PROJECT_DIR$/math/src/main/java/DataSet.java" />
         <option value="$PROJECT_DIR$/param_server/src/main/java/WorkerUpdater.java" />
-        <option value="$PROJECT_DIR$/client/src/main/java/Client.java" />
         <option value="$PROJECT_DIR$/param_server/src/main/java/ParamServer.java" />
         <option value="$PROJECT_DIR$/cluster_management/src/main/java/Worker.java" />
         <option value="$PROJECT_DIR$/cluster_management/src/main/java/ModelReplica.java" />
-        <option value="$PROJECT_DIR$/math/src/test/java/LossFuncTest.java" />
         <option value="$PROJECT_DIR$/cluster_management/src/test/java/LossFuncTest.java" />
-        <option value="$PROJECT_DIR$/math/src/main/java/LossFunc.java" />
         <option value="$PROJECT_DIR$/cluster_management/src/main/java/Master.java" />
         <option value="$PROJECT_DIR$/.gitignore" />
+        <option value="$PROJECT_DIR$/math/pom.xml" />
+        <option value="$PROJECT_DIR$/math/math.iml" />
+        <option value="$PROJECT_DIR$/cluster_components/src/main/java/UpdateWorkerParams.java" />
+        <option value="$PROJECT_DIR$/cluster_components/src/main/java/ParameterUpdater.java" />
+        <option value="$PROJECT_DIR$/.idea/modules.xml" />
+        <option value="$PROJECT_DIR$/math/src/test/java/LossFuncTest.java" />
+        <option value="$PROJECT_DIR$/cluster_components/pom.xml" />
+        <option value="$PROJECT_DIR$/cluster_components/src/main/java/Worker.java" />
+        <option value="$PROJECT_DIR$/.idea/misc.xml" />
+        <option value="$PROJECT_DIR$/cluster_components/src/main/java/Master.java" />
+        <option value="$PROJECT_DIR$/cluster_components/src/main/java/Message.java" />
+        <option value="$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/LossFunc.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/L2RegLogistic.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/LossFunction.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/L2RegLogisticLoss.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/Optimizer.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/DenseOptimizer.java" />
+        <option value="$PROJECT_DIR$/math/src/test/java/L2RegLogisticLossTest.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/L2RegLogisticDenseLoss.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/LossGrad.java" />
+        <option value="$PROJECT_DIR$/math/src/test/java/L2RegLogisticDenseLossTest.java" />
+        <option value="$PROJECT_DIR$/math/src/test/java/StochasticGradientDescentTest.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/StochasticGradientDescent.java" />
+        <option value="$PROJECT_DIR$/math/src/main/java/DenseLossFunction.java" />
+        <option value="$PROJECT_DIR$/client/src/main/java/Client.java" />
+        <option value="$PROJECT_DIR$/cluster_components/src/main/java/ModelReplica.java" />
       </list>
     </option>
   </component>
@@ -206,8 +142,8 @@
     </option>
   </component>
   <component name="ProjectFrameBounds">
-    <option name="x" value="-1928" />
-    <option name="y" value="-328" />
+    <option name="x" value="-8" />
+    <option name="y" value="-8" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
   </component>
@@ -258,17 +194,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <PATH>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="CSE461DistLogit" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
-            </PATH_ELEMENT>
-          </PATH>
-        </subPane>
-      </pane>
-      <pane id="Scratches" />
       <pane id="ProjectPane">
         <subPane>
           <PATH>
@@ -440,10 +365,6 @@
               <option name="myItemId" value="src" />
               <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
             </PATH_ELEMENT>
-            <PATH_ELEMENT>
-              <option name="myItemId" value="test" />
-              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PsiDirectoryNode" />
-            </PATH_ELEMENT>
           </PATH>
           <PATH>
             <PATH_ELEMENT>
@@ -470,15 +391,26 @@
         </subPane>
       </pane>
       <pane id="Scope" />
+      <pane id="Scratches" />
+      <pane id="PackagesPane">
+        <subPane>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="CSE461DistLogit" />
+              <option name="myItemType" value="com.intellij.ide.projectView.impl.nodes.PackageViewProjectNode" />
+            </PATH_ELEMENT>
+          </PATH>
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
     <property name="aspect.path.notification.shown" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="C:/Program Files/Anaconda/pkgs/numpy-1.9.2-py27_p0" />
-    <property name="settings.editor.selected.configurable" value="reference.projectsettings.compiler.javacompiler" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/cluster_components/cluster_components.iml" />
+    <property name="settings.editor.selected.configurable" value="fileTemplates" />
     <property name="settings.editor.splitter.proportion" value="0.2" />
-    <property name="project.structure.last.edited" value="Project" />
+    <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="Downloaded.Files.Path.Enabled" value="false" />
@@ -502,37 +434,98 @@
       <recent name="D:\GitHub\cse461FinalProject\client\src\main" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.CLient">
-    <configuration default="false" name="Unittests in java" type="tests" factoryName="Unittests" temporary="true" nameIsGenerated="true">
-      <option name="INTERPRETER_OPTIONS" value="" />
-      <option name="PARENT_ENVS" value="true" />
-      <envs />
-      <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/math/src/test/java" />
-      <option name="IS_MODULE_SDK" value="true" />
-      <option name="ADD_CONTENT_ROOTS" value="true" />
-      <option name="ADD_SOURCE_ROOTS" value="true" />
-      <module name="math" />
-      <EXTENSION ID="PythonCoverageRunConfigurationExtension" enabled="false" sample_coverage="true" runner="coverage.py" />
-      <option name="SCRIPT_NAME" value="" />
-      <option name="CLASS_NAME" value="" />
-      <option name="METHOD_NAME" value="" />
-      <option name="FOLDER_NAME" value="$PROJECT_DIR$/math/src/test/java" />
-      <option name="TEST_TYPE" value="TEST_FOLDER" />
-      <option name="PATTERN" value="" />
-      <option name="USE_PATTERN" value="false" />
-      <option name="PUREUNITTEST" value="true" />
-      <option name="PARAMS" value="" />
-      <option name="USE_PARAM" value="false" />
-      <method />
-    </configuration>
-    <configuration default="false" name="LossFuncTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.StochasticGradientDescentTest">
+    <configuration default="false" name="L2RegLogisticDenseLossTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
       <module name="math" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PACKAGE_NAME" value="" />
-      <option name="MAIN_CLASS_NAME" value="LossFuncTest" />
+      <option name="MAIN_CLASS_NAME" value="L2RegLogisticDenseLossTest" />
+      <option name="METHOD_NAME" />
+      <option name="TEST_OBJECT" value="class" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="L2RegLogisticDenseLossTest.testL2Grad" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="math" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="L2RegLogisticDenseLossTest" />
+      <option name="METHOD_NAME" value="testL2Grad" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="StochasticGradientDescentTest.testGetUpdateLoss" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="math" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="StochasticGradientDescentTest" />
+      <option name="METHOD_NAME" value="testGetUpdateLoss" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="StochasticGradientDescentTest.testGetUpdateGrad" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="math" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="StochasticGradientDescentTest" />
+      <option name="METHOD_NAME" value="testGetUpdateGrad" />
+      <option name="TEST_OBJECT" value="method" />
+      <option name="VM_PARAMETERS" />
+      <option name="PARAMETERS" />
+      <option name="WORKING_DIRECTORY" />
+      <option name="ENV_VARIABLES" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="TEST_SEARCH_SCOPE">
+        <value defaultName="singleModule" />
+      </option>
+      <envs />
+      <patterns />
+      <method />
+    </configuration>
+    <configuration default="false" name="StochasticGradientDescentTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <extension name="coverage" enabled="false" merge="false" sample_coverage="true" runner="idea" />
+      <module name="math" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="MAIN_CLASS_NAME" value="StochasticGradientDescentTest" />
       <option name="METHOD_NAME" />
       <option name="TEST_OBJECT" value="class" />
       <option name="VM_PARAMETERS" />
@@ -1142,15 +1135,21 @@
       <envs />
       <method />
     </configuration>
-    <list size="3">
+    <list size="6">
       <item index="0" class="java.lang.String" itemvalue="Application.CLient" />
-      <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in java" />
-      <item index="2" class="java.lang.String" itemvalue="JUnit.LossFuncTest" />
+      <item index="1" class="java.lang.String" itemvalue="JUnit.L2RegLogisticDenseLossTest" />
+      <item index="2" class="java.lang.String" itemvalue="JUnit.L2RegLogisticDenseLossTest.testL2Grad" />
+      <item index="3" class="java.lang.String" itemvalue="JUnit.StochasticGradientDescentTest.testGetUpdateLoss" />
+      <item index="4" class="java.lang.String" itemvalue="JUnit.StochasticGradientDescentTest.testGetUpdateGrad" />
+      <item index="5" class="java.lang.String" itemvalue="JUnit.StochasticGradientDescentTest" />
     </list>
     <recent_temporary>
-      <list size="2">
-        <item index="0" class="java.lang.String" itemvalue="JUnit.LossFuncTest" />
-        <item index="1" class="java.lang.String" itemvalue="Python tests.Unittests in java" />
+      <list size="5">
+        <item index="0" class="java.lang.String" itemvalue="JUnit.StochasticGradientDescentTest" />
+        <item index="1" class="java.lang.String" itemvalue="JUnit.StochasticGradientDescentTest.testGetUpdateGrad" />
+        <item index="2" class="java.lang.String" itemvalue="JUnit.StochasticGradientDescentTest.testGetUpdateLoss" />
+        <item index="3" class="java.lang.String" itemvalue="JUnit.L2RegLogisticDenseLossTest" />
+        <item index="4" class="java.lang.String" itemvalue="JUnit.L2RegLogisticDenseLossTest.testL2Grad" />
       </list>
     </recent_temporary>
   </component>
@@ -1181,48 +1180,52 @@
       <workItem from="1448145935129" duration="15774000" />
       <workItem from="1448247405437" duration="18799000" />
       <workItem from="1448312833470" duration="512000" />
-      <workItem from="1448419687461" duration="15664000" />
+      <workItem from="1448419687461" duration="34202000" />
+      <workItem from="1448603441015" duration="706000" />
+      <workItem from="1448604164529" duration="2405000" />
+      <workItem from="1448608422784" duration="4193000" />
+      <workItem from="1448671544634" duration="11687000" />
     </task>
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="LossFuncTest - 2015.11.25 at 17h 32m 38s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="L2RegLogisticDenseLossTest - 2015.11.27 at 21h 52m 42s.xml">
+      <configuration name="L2RegLogisticDenseLossTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LossFuncTest - 2015.11.25 at 17h 33m 12s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="StochasticGradientDescentTest - 2015.11.27 at 22h 11m 37s.xml">
+      <configuration name="StochasticGradientDescentTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LossFuncTest - 2015.11.25 at 17h 35m 12s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="StochasticGradientDescentTest - 2015.11.27 at 22h 16m 32s.xml">
+      <configuration name="StochasticGradientDescentTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LossFuncTest - 2015.11.25 at 17h 35m 56s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="StochasticGradientDescentTest_testGetUpdateGrad - 2015.11.27 at 22h 10m 00s.xml">
+      <configuration name="StochasticGradientDescentTest.testGetUpdateGrad" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LossFuncTest - 2015.11.25 at 17h 36m 40s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="StochasticGradientDescentTest_testGetUpdateGrad - 2015.11.27 at 22h 11m 22s.xml">
+      <configuration name="StochasticGradientDescentTest.testGetUpdateGrad" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LossFuncTest - 2015.11.25 at 17h 37m 43s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="StochasticGradientDescentTest_testGetUpdateGrad - 2015.11.27 at 22h 11m 29s.xml">
+      <configuration name="StochasticGradientDescentTest.testGetUpdateGrad" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LossFuncTest - 2015.11.25 at 17h 37m 50s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="StochasticGradientDescentTest_testGetUpdateLoss - 2015.11.27 at 21h 52m 54s.xml">
+      <configuration name="StochasticGradientDescentTest.testGetUpdateLoss" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LossFuncTest - 2015.11.25 at 17h 46m 18s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="StochasticGradientDescentTest_testGetUpdateLoss - 2015.11.27 at 21h 53m 37s.xml">
+      <configuration name="StochasticGradientDescentTest.testGetUpdateLoss" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LossFuncTest - 2015.11.25 at 17h 50m 39s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="StochasticGradientDescentTest_testGetUpdateLoss - 2015.11.27 at 21h 54m 53s.xml">
+      <configuration name="StochasticGradientDescentTest.testGetUpdateLoss" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="LossFuncTest - 2015.11.26 at 02h 29m 21s.xml">
-      <configuration name="LossFuncTest" configurationId="JUnit" />
+    <history-entry file="StochasticGradientDescentTest_testGetUpdateLoss - 2015.11.27 at 21h 55m 09s.xml">
+      <configuration name="StochasticGradientDescentTest.testGetUpdateLoss" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="66519000" />
+    <option name="totallyTimeSpent" value="104048000" />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-1928" y="-328" width="1936" height="1056" extended-state="6" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="3" side_tool="false" content_ui="tabs" />
       <window_info id="TODO" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
@@ -1231,10 +1234,10 @@
       <window_info id="Event Log" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.2230444" sideWeight="0.50208336" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" />
       <window_info id="Version Control" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="12" side_tool="false" content_ui="tabs" />
-      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.3065539" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
+      <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.3065539" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Terminal" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="10" side_tool="false" content_ui="tabs" />
       <window_info id="Designer" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="4" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1828125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" show_stripe_button="true" weight="0.1828125" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Database" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.33" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Structure" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
       <window_info id="Ant Build" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" show_stripe_button="true" weight="0.25" sideWeight="0.5" order="1" side_tool="false" content_ui="tabs" />
@@ -1265,15 +1268,7 @@
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
-      <breakpoints>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/math/src/main/java/LossFunc.java</url>
-          <line>15</line>
-          <properties />
-          <option name="timeStamp" value="5" />
-        </line-breakpoint>
-      </breakpoints>
-      <option name="time" value="6" />
+      <option name="time" value="29" />
     </breakpoint-manager>
     <watches-manager />
   </component>
@@ -1282,22 +1277,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/client/src/main/java/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Master.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Worker.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
@@ -1309,72 +1288,10 @@
     <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/main/java/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Master.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Worker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/main/java/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Master.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Worker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="7" column="1" selection-start-line="7" selection-start-column="1" selection-end-line="7" selection-end-column="1" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1382,7 +1299,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1406,7 +1322,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1414,7 +1332,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1438,46 +1355,9 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/main/java/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="3" column="26" selection-start-line="3" selection-start-column="26" selection-end-line="3" selection-end-column="26" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Master.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="9" column="3" selection-start-line="9" selection-start-column="3" selection-end-line="9" selection-end-column="3" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Worker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="4" column="30" selection-start-line="4" selection-start-column="30" selection-end-line="4" selection-end-column="30" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math/math.iml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.33333334">
-          <caret line="18" column="14" selection-start-line="18" selection-start-column="14" selection-end-line="18" selection-end-column="14" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -1524,14 +1404,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.23448277">
-          <caret line="8" column="18" selection-start-line="8" selection-start-column="18" selection-end-line="8" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/lang/Integer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.33333334">
@@ -1544,39 +1416,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.17941953">
           <caret line="8" column="25" selection-start-line="8" selection-start-column="25" selection-end-line="8" selection-end-column="25" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math/pom.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.20184697">
-          <caret line="9" column="18" selection-start-line="9" selection-start-column="18" selection-end-line="9" selection-end-column="18" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Worker.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.42592594">
-          <caret line="72" column="65" selection-start-line="72" selection-start-column="65" selection-end-line="72" selection-end-column="65" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/ModelReplica.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25925925">
-          <caret line="14" column="13" selection-start-line="14" selection-start-column="13" selection-end-line="14" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math/loss.py">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.25925925">
-          <caret line="15" column="82" selection-start-line="15" selection-start-column="82" selection-end-line="15" selection-end-column="82" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1592,7 +1431,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
           <caret line="254" column="0" selection-start-line="254" selection-start-column="0" selection-end-line="254" selection-end-column="0" />
-          <folding />
         </state>
       </provider>
     </entry>
@@ -1600,24 +1438,106 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.3508772">
           <caret line="1487" column="0" selection-start-line="1487" selection-start-column="0" selection-end-line="1487" selection-end-column="0" />
-          <folding>
-            <element signature="e#45545#45546#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.gitignore">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6481481">
+          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/io/DataInputStream.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
+        <state vertical-scroll-proportion="0.19607843">
           <caret line="194" column="0" selection-start-line="194" selection-start-column="0" selection-end-line="194" selection-end-column="0" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/.m2/repository/org/nd4j/nd4j-api/0.4-rc0/nd4j-api-0.4-rc0.jar!/org/nd4j/linalg/api/ops/Accumulation.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.19883041">
+          <caret line="11" column="17" selection-start-line="11" selection-start-column="17" selection-end-line="11" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math/math.iml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="-0.51592356">
+          <caret line="8" column="55" selection-start-line="8" selection-start-column="55" selection-end-line="8" selection-end-column="55" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.26681614">
+          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
           <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/modules.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.114349775">
+          <caret line="6" column="65" selection-start-line="6" selection-start-column="65" selection-end-line="6" selection-end-column="65" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cluster_components/pom.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28239202">
+          <caret line="10" column="20" selection-start-line="10" selection-start-column="20" selection-end-line="10" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/.idea/misc.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.28239202">
+          <caret line="10" column="67" selection-start-line="10" selection-start-column="67" selection-end-line="10" selection-end-column="67" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/lang/Override.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.7308917">
+          <caret line="50" column="18" selection-start-line="50" selection-start-column="18" selection-end-line="50" selection-end-column="18" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/.m2/repository/junit/junit/4.11/junit-4.11.jar!/org/junit/internal/runners/statements/RunBefores.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.72904485">
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://D:/.m2/repository/junit/junit/4.11/junit-4.11.jar!/org/junit/runners/model/FrameworkMethod.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.4639376">
+          <caret line="28" column="0" selection-start-line="28" selection-start-column="0" selection-end-line="28" selection-end-column="0" />
+          <folding>
+            <element signature="e#817#987#0" expanded="true" />
+            <element signature="e#986#987#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="jar://D:/.m2/repository/junit/junit/4.11/junit-4.11.jar!/org/junit/runners/ParentRunner.class">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.3840156">
-          <caret line="156" column="0" selection-start-line="156" selection-start-column="0" selection-end-line="156" selection-end-column="0" />
+        <state vertical-scroll-proportion="0.40155944">
+          <caret line="155" column="0" selection-start-line="155" selection-start-column="0" selection-end-line="155" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://C:/Program Files/Java/jdk1.8.0_60/src.zip!/java/util/function/Function.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.6925926">
+          <caret line="45" column="37" selection-start-line="45" selection-start-column="37" selection-end-line="45" selection-end-column="37" />
           <folding />
         </state>
       </provider>
@@ -1630,18 +1550,110 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Master.java">
+    <entry file="file://$PROJECT_DIR$/math/src/main/java/L2RegLogisticDenseLoss.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="1" column="6" selection-start-line="1" selection-start-column="6" selection-end-line="1" selection-end-column="6" />
+          <caret line="23" column="17" selection-start-line="23" selection-start-column="17" selection-end-line="23" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math/src/main/java/StochasticGradientDescent.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16242038">
+          <caret line="6" column="13" selection-start-line="6" selection-start-column="13" selection-end-line="6" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math/src/main/java/LossGrad.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.18949045">
+          <caret line="7" column="33" selection-start-line="7" selection-start-column="33" selection-end-line="7" selection-end-column="33" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/WorkerUpdater.java">
+    <entry file="file://$PROJECT_DIR$/math/src/test/java/StochasticGradientDescentTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.24363057">
+          <caret line="9" column="78" selection-start-line="9" selection-start-column="78" selection-end-line="9" selection-end-column="78" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math/src/test/java/L2RegLogisticDenseLossTest.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2977707">
+          <caret line="11" column="53" selection-start-line="11" selection-start-column="53" selection-end-line="11" selection-end-column="53" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math/src/main/java/DenseOptimizer.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13535032">
+          <caret line="5" column="43" selection-start-line="5" selection-start-column="43" selection-end-line="5" selection-end-column="43" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/math/src/main/java/DenseLossFunction.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.05414013">
+          <caret line="2" column="0" selection-start-line="2" selection-start-column="0" selection-end-line="2" selection-end-column="0" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/client/src/main/java/Client.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.8121019">
+          <caret line="64" column="20" selection-start-line="64" selection-start-column="20" selection-end-line="64" selection-end-column="20" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Message.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
+          <caret line="0" column="24" selection-start-line="0" selection-start-column="24" selection-end-line="0" selection-end-column="24" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Master.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.35191083">
+          <caret line="13" column="40" selection-start-line="13" selection-start-column="40" selection-end-line="13" selection-end-column="40" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/ModelReplica.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.2977707">
+          <caret line="11" column="13" selection-start-line="11" selection-start-column="13" selection-end-line="11" selection-end-column="13" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/ParameterUpdater.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.08121019">
+          <caret line="3" column="0" selection-start-line="3" selection-start-column="0" selection-end-line="3" selection-end-column="0" />
           <folding />
         </state>
       </provider>
@@ -1649,41 +1661,35 @@
     <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/ParamServer.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
-          <caret line="21" column="5" selection-start-line="21" selection-start-column="5" selection-end-line="21" selection-end-column="5" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/math/src/main/java/LossFunc.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0">
-          <caret line="18" column="103" selection-start-line="18" selection-start-column="102" selection-end-line="18" selection-end-column="103" />
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/math/src/test/java/LossFuncTest.java">
+    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/UpdateWorkerParams.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.027070064">
+          <caret line="1" column="8" selection-start-line="1" selection-start-column="8" selection-end-line="1" selection-end-column="8" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/Worker.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0">
+          <caret line="0" column="0" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/cluster_components/src/main/java/WorkerUpdater.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.13535032">
           <caret line="5" column="13" selection-start-line="5" selection-start-column="13" selection-end-line="5" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/.gitignore">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.6481481">
-          <caret line="35" column="8" selection-start-line="35" selection-start-column="8" selection-end-line="35" selection-end-column="8" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/client/src/main/java/Client.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.537037">
-          <caret line="41" column="73" selection-start-line="41" selection-start-column="73" selection-end-line="42" selection-end-column="47" />
           <folding />
         </state>
       </provider>
@@ -1741,7 +1747,7 @@
       </state>
       <state key="ModuleStructureConfigurable.UI">
         <settings>
-          <last-edited>cluster_components</last-edited>
+          <last-edited>math</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

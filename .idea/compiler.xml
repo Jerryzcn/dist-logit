@@ -23,12 +23,14 @@
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
         <module name="client" />
+        <module name="cluster_components" />
         <module name="cluster_management" />
         <module name="math" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel target="1.8">
       <module name="client" target="1.8" />
+      <module name="cluster_components" target="1.8" />
       <module name="math" target="1.8" />
     </bytecodeTargetLevel>
   </component>

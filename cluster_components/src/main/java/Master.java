@@ -12,7 +12,7 @@
 public class Master {
   // Connections needed: tcp from master to workers
   //                     tcp from client to master
-  //                     tcp from parameter servers to master
+  //                     tcp from master to parameter serverss
 
 
   public enum Config {

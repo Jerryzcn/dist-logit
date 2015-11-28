@@ -8,7 +8,7 @@
       <list>
         <option value="$PROJECT_DIR$/math/pom.xml" />
         <option value="$PROJECT_DIR$/client/pom.xml" />
-        <option value="$PROJECT_DIR$/cluster_management/pom.xml" />
+        <option value="$PROJECT_DIR$/cluster_components/pom.xml" />
       </list>
     </option>
   </component>
