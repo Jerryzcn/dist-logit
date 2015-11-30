@@ -17,7 +17,7 @@ public class ParamServer implements Runnable {
   private final ServerSocket masterSocket;
 
   private Map<InetAddress, Integer> workers;
-  private WorkerUpdater[] workerUpdaters;
+  private ParameterUpdater[] workerUpdaters;
   private float[] parameters;
   private boolean isStopped;
 
@@ -39,19 +39,10 @@ public class ParamServer implements Runnable {
   /**
    * Constructs a parameter server.
    *
-   * @param workers a map of workers address to ports
-   * @param lo      the lower bound of the feature index
-   * @param hi      the upper bound of the feature index
+   * @param lo the lower bound of the feature index
+   * @param hi the upper bound of the feature index
    */
-  public ParamServer(Map<InetAddress, Integer> workers, int port, int lo, int hi)
-      throws IOException {
-    this.workers = workers;
-    workerUpdaters = new WorkerUpdater[workers.keySet().size()];
-    int i = 0;
-    for (InetAddress workerAddress : workers.keySet()) {
-      workerUpdaters[i] = new WorkerUpdater(parameters, workerAddress, workers.get(workerAddress));
-      i++;
-    }
+  public ParamServer(int port, int lo, int hi) throws IOException {
     masterSocket = new ServerSocket(port);
     parameters = new float[hi - lo];
     isStopped = true;
@@ -66,11 +57,23 @@ public class ParamServer implements Runnable {
       initialize(inBuf, outBuf);
       outBuf.write(Message.INITIALIZED.getBytes("UTF-8"));
       outBuf.flush();
+      workerUpdaters = new ParameterUpdater[workers.size()];
+      int i = 0;
+      for (InetAddress workerAddress : workers.keySet()) {
+        workerUpdaters[i] =
+            new ParameterUpdater(parameters, workerAddress, workers.get(workerAddress));
+        new Thread(workerUpdaters[i]).start();
+        i++;
+      }
       while (!isStopped()) {
         // TODO: communicate with master.
       }
     } catch (IOException e) {
       e.printStackTrace();
+    } finally {
+      for (ParameterUpdater updater : workerUpdaters) {
+        updater.stop();
+      }
     }
   }
 
