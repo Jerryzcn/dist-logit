@@ -61,7 +61,9 @@ public class ParamServer implements Runnable {
       int i = 0;
       for (InetAddress workerAddress : workers.keySet()) {
         workerUpdaters[i] =
-            new ParameterUpdater(parameters, workerAddress, workers.get(workerAddress));
+            new ParameterUpdater(parameters, workerAddress, workers.get(workerAddress),
+                parameters.length * DenseNetworkVector.SIZE_OF_FLOAT
+                    + DenseNetworkVector.SIZE_OF_LONG);
         new Thread(workerUpdaters[i]).start();
         i++;
       }
@@ -82,7 +84,9 @@ public class ParamServer implements Runnable {
   }
 
 
-  /** Stops the parameter server. */
+  /**
+   * Stops the parameter server.
+   */
   public void stop() {
     isStopped = true;
     try {
