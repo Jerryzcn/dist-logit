@@ -1,6 +1,7 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -17,7 +18,6 @@ public class ParamServer implements Runnable {
   private final ServerSocket masterSocket;
 
   private Map<InetAddress, Integer> workers;
-  private ParameterUpdater[] workerUpdaters;
   private float[] parameters;
   private boolean isStopped;
 
@@ -39,8 +39,9 @@ public class ParamServer implements Runnable {
   /**
    * Constructs a parameter server.
    *
-   * @param lo the lower bound of the feature index
-   * @param hi the upper bound of the feature index
+   * @param port the tcp port to master
+   * @param lo   the lower bound of the feature index
+   * @param hi   the upper bound of the feature index
    */
   public ParamServer(int port, int lo, int hi) throws IOException {
     masterSocket = new ServerSocket(port);
@@ -52,30 +53,20 @@ public class ParamServer implements Runnable {
     isStopped = false;
     try (Socket masterConnection = masterSocket.accept();
         BufferedInputStream inBuf = new BufferedInputStream(masterConnection.getInputStream());
-        BufferedOutputStream outBuf = new BufferedOutputStream(
-            masterConnection.getOutputStream())) {
+        BufferedOutputStream outBuf = new BufferedOutputStream(masterConnection.getOutputStream());
+        ParameterUpdater paramUpdaters = new ParameterUpdater(parameters);
+        PullHandler pullHandler = new PullHandler(parameters)) {
       initialize(inBuf, outBuf);
       outBuf.write(Message.INITIALIZED.getBytes("UTF-8"));
       outBuf.flush();
-      workerUpdaters = new ParameterUpdater[workers.size()];
-      int i = 0;
-      for (InetAddress workerAddress : workers.keySet()) {
-        workerUpdaters[i] =
-            new ParameterUpdater(parameters, workerAddress, workers.get(workerAddress),
-                parameters.length * DenseNetworkVector.SIZE_OF_FLOAT
-                    + DenseNetworkVector.SIZE_OF_LONG);
-        new Thread(workerUpdaters[i]).start();
-        i++;
-      }
+      new Thread(paramUpdaters).start();
+      int pushPort = paramUpdaters.getLocalPort();
+      int pullPort = pullHandler.getLocalPort();
       while (!isStopped()) {
         // TODO: communicate with master.
       }
     } catch (IOException e) {
       e.printStackTrace();
-    } finally {
-      for (ParameterUpdater updater : workerUpdaters) {
-        updater.stop();
-      }
     }
   }
 
@@ -84,9 +75,7 @@ public class ParamServer implements Runnable {
   }
 
 
-  /**
-   * Stops the parameter server.
-   */
+  /** Stops the parameter server */
   public void stop() {
     isStopped = true;
     try {

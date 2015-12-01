@@ -1,26 +1,21 @@
+import java.io.Closeable;
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
 
-/**
- * Update the parameters in parameter servers.
- */
-public class ParameterUpdater implements Runnable {
-  private final InetAddress workerAddress;
-  private final int port;
+/** Update the parameters in parameter servers */
+public class ParameterUpdater implements Runnable, Closeable {
+  private final DatagramSocket socket;
 
   private DenseNetworkVector gradient;
   private float[] parameters;
-  private int packetLength;
   private boolean isStopped;
 
-  public ParameterUpdater(float[] parameters, InetAddress workerAddress, int port,
-      int packetLength) {
+  public ParameterUpdater(float[] parameters) throws SocketException {
     this.parameters = parameters;
-    this.workerAddress = workerAddress;
-    this.port = port;
+    this.socket = new DatagramSocket();
     gradient = new DenseNetworkVector(parameters.length);
     this.isStopped = true;
   }
@@ -29,8 +24,8 @@ public class ParameterUpdater implements Runnable {
     isStopped = false;
     byte[] buf = new byte[gradient.size()];
     while (!isStopped()) {
-      try (DatagramSocket in = new DatagramSocket(port)) {
-        in.receive(new DatagramPacket(buf, packetLength));
+      try {
+        socket.receive(new DatagramPacket(buf, buf.length));
         gradient.readBytes(buf);
         float[] update = gradient.getVector();
         for (int i = 0; i < update.length; i++) {
@@ -44,11 +39,18 @@ public class ParameterUpdater implements Runnable {
     }
   }
 
+  public int getLocalPort() {
+    return socket.getLocalPort();
+  }
+
   public boolean isStopped() {
     return isStopped;
   }
 
-  public void stop() {
-    isStopped = true;
+  @Override public void close() throws IOException {
+    if (!isStopped()) {
+      isStopped = true;
+    }
+    socket.close();
   }
 }
