@@ -32,7 +32,10 @@ public class ParameterUpdater implements Runnable {
       try (DatagramSocket in = new DatagramSocket(port)) {
         in.receive(new DatagramPacket(buf, packetLength));
         gradient.readBytes(buf);
-
+        float[] update = gradient.getVector();
+        for (int i = 0; i < update.length; i++) {
+          parameters[i] = update[i];
+        }
       } catch (SocketException e) {
         e.printStackTrace();
       } catch (IOException e) {
