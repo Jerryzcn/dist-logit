@@ -1,5 +1,6 @@
 import org.nd4j.linalg.dataset.DataSet;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -91,6 +92,12 @@ public class Worker implements Runnable {
   // Sets relevant information for the worker.
   private DataSet initialize(Socket connectionToMaster, Map<InetAddress, Integer> paramServers) {
     // TODO: get packets from master and sets training data, label, etc.
+    try (final BufferedInputStream in = new BufferedInputStream(
+        connectionToMaster.getInputStream())) {
+      
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     return null;
   }
 
