@@ -19,6 +19,7 @@ public class Worker implements Runnable {
 
   private static final int NUM_OF_THREADS = 4;
 
+  private float[] hyperParams;
   private int workerId;
   private boolean isStopped;
   private int tcpPort;
@@ -65,10 +66,10 @@ public class Worker implements Runnable {
     isStopped = true;
     try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
       Socket connectionToMaster = workerSocket.accept();
+      Map<InetAddress, ParamServerSettings> paramServers = new HashMap<>();
+      DataSet dataset = initialize(connectionToMaster, paramServers);
       while (!isStopped()) {
-        Map<InetAddress, ParamServerSettings> paramServers = new HashMap<>();
-        DataSet dataset = initialize(connectionToMaster, paramServers);
-        ModelReplica model = new ModelReplica(paramServers, dataset);
+        ModelReplica model = new ModelReplica(paramServers, dataset, hyperParams);
         new Thread(model).start();
         BufferedReader buf =
             new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));

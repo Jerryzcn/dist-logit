@@ -1,5 +1,7 @@
 import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.indexing.NDArrayIndex;
 
+import java.lang.reflect.Parameter;
 import java.net.InetAddress;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -15,20 +17,16 @@ public class ModelReplica implements Runnable {
   private final DataSet dataset;
   private float[] w;
   private final ExecutorService pool;
-  private final float learningRate;
-  private final float lambda;
-  private final int batchSize;
+  float[] hyperParams;
 
-  public ModelReplica(Map<InetAddress, ParamServerSettings> paramServers, DataSet dataset,
-      float learningRate, float lambda, int batchSize) {
+  public ModelReplica(final Map<InetAddress, ParamServerSettings> paramServers, DataSet dataset,
+      float[] hyperParams) {
     this.dataset = dataset;
     isStopped = true;
     w = new float[dataset.getFeatures().columns()];
     this.paramServers = paramServers;
     this.pool = Executors.newFixedThreadPool(NUM_OF_THREADS);
-    this.learningRate = learningRate;
-    this.lambda = lambda;
-    this.batchSize = batchSize;
+    this.hyperParams = hyperParams;
   }
 
   @Override public void run() {
@@ -39,24 +37,29 @@ public class ModelReplica implements Runnable {
     for (InetAddress address : paramServers.keySet()) {
       ParamServerSettings settings = paramServers.get(address);
       pullers[i] =
-          new ParameterPuller(address, settings.downPort, settings.lowIndex, settings.highIndex);
+          new ParameterPuller(address, w, settings.downPort, settings.lowIndex, settings.highIndex);
       i++;
     }
     for (ParameterPuller puller : pullers) {
       pool.execute(puller);
     }
     StochasticGradientDescent sgd =
-        new StochasticGradientDescent(new L2RegLogisticDenseLoss(), dataset, learningRate, lambda,
-            batchSize);
+        new StochasticGradientDescent(new L2RegLogisticDenseLoss(), dataset, hyperParams);
     LossGrad lossGrad;
     while (!isStopped()) {
       // TODO: upload gradient
       synchronized (w) {
         lossGrad = sgd.getUpdate(w);
       }
-      for (i = 0; i < paramServers.size(); i++) {
-        new GradientPusher(lossGrad.gradient, ); //TODO: finish this!
+      for (InetAddress address : paramServers.keySet()) {
+        ParamServerSettings settings = paramServers.get(address);
+        new GradientPusher(
+            lossGrad.gradient.get(NDArrayIndex.interval(settings.lowIndex, settings.highIndex)),
+            address, settings.upPort);
       }
+    }
+    for (ParameterPuller puller : pullers) {
+      puller.stop();
     }
   }
 

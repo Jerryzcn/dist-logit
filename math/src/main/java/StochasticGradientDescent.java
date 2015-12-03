@@ -11,13 +11,22 @@ public class StochasticGradientDescent implements DenseOptimizer {
   private final float lambda;
   private int batchIndex;
 
+  /**
+   * Provides function to compute a loss and a update that is in the direction of the gradient of
+   * the loss w.r.t parameters.
+   *
+   * @param lossFunction The loss function
+   * @param dataset      Training data and labels
+   * @param hyperParams  Hyper-parameters: 0: learning rate, 1: regularization constant,
+   *                     2: batch size
+   */
   public StochasticGradientDescent(DenseLossFunction lossFunction, DataSet dataset,
-      float learningRate, float lambda, int batchSize) {
-    this.dataSets =
-        dataset.batchBy(batchSize).stream().map(DataSet::merge).collect(Collectors.toList());
-    this.learningRate = learningRate;
+      float[] hyperParams) {
+    this.dataSets = dataset.batchBy((int) hyperParams[2]).stream().map(DataSet::merge)
+        .collect(Collectors.toList());
+    this.learningRate = hyperParams[0];
     this.lossFunction = lossFunction;
-    this.lambda = lambda;
+    this.lambda = hyperParams[1];
     batchIndex = -1;
   }
 

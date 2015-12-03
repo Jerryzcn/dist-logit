@@ -1,3 +1,5 @@
+import org.nd4j.linalg.api.ndarray.INDArray;
+
 import java.net.InetAddress;
 
 /**
@@ -5,7 +7,7 @@ import java.net.InetAddress;
  */
 public class GradientPusher implements Runnable {
 
-  public GradientPusher(float[] gradient, InetAddress address, int port) {
+  public GradientPusher(INDArray gradient, InetAddress address, int port) {
 
   }
 
