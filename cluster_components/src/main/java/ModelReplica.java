@@ -2,7 +2,10 @@ import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
 import java.lang.reflect.Parameter;
+import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -46,17 +49,29 @@ public class ModelReplica implements Runnable {
     StochasticGradientDescent sgd =
         new StochasticGradientDescent(new L2RegLogisticDenseLoss(), dataset, hyperParams);
     LossGrad lossGrad;
-    while (!isStopped()) {
-      // TODO: upload gradient
-      synchronized (w) {
-        lossGrad = sgd.getUpdate(w);
+    DatagramSocket[] sockets = new DatagramSocket[paramServers.size()];
+    try {
+      for (i = 0; i < sockets.length; i++) {
+        sockets[i] = new DatagramSocket();
       }
-      for (InetAddress address : paramServers.keySet()) {
-        ParamServerSettings settings = paramServers.get(address);
-        new GradientPusher(
-            lossGrad.gradient.get(NDArrayIndex.interval(settings.lowIndex, settings.highIndex)),
-            address, settings.upPort);
+      while (!isStopped()) {
+        // TODO: upload gradient
+        synchronized (w) {
+          lossGrad = sgd.getUpdate(w);
+        }
+        i = 0;
+        for (InetAddress address : paramServers.keySet()) {
+          ParamServerSettings settings = paramServers.get(address);
+          new GradientPusher(
+              lossGrad.gradient.get(NDArrayIndex.interval(settings.lowIndex, settings.highIndex)),
+              sockets[i], address, settings.upPort);
+          i++;
+        }
       }
+    } catch (SocketException e) {
+      e.printStackTrace();
+    } finally {
+      Arrays.stream(sockets).forEach(DatagramSocket::close);
     }
     for (ParameterPuller puller : pullers) {
       puller.stop();
