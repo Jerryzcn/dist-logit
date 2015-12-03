@@ -71,7 +71,7 @@ public class Worker implements Runnable {
     while (!isStopped()) {
       try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
         Socket connectionToMaster = workerSocket.accept();
-        Map<InetAddress, Integer> paramServers = new HashMap<>();
+        Map<InetAddress, ParamServerSettings> paramServers = new HashMap<>();
         DataSet dataset = initialize(connectionToMaster, paramServers);
         ModelReplica model = new ModelReplica(paramServers, dataset);
         new Thread(model).start();
@@ -90,11 +90,12 @@ public class Worker implements Runnable {
   }
 
   // Sets relevant information for the worker.
-  private DataSet initialize(Socket connectionToMaster, Map<InetAddress, Integer> paramServers) {
+  private DataSet initialize(Socket connectionToMaster,
+      Map<InetAddress, ParamServerSettings> paramServers) {
     // TODO: get packets from master and sets training data, label, etc.
     try (final BufferedInputStream in = new BufferedInputStream(
         connectionToMaster.getInputStream())) {
-      
+
     } catch (IOException e) {
       e.printStackTrace();
     }
