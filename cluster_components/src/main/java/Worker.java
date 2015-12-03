@@ -21,7 +21,6 @@ public class Worker implements Runnable {
 
   private int workerId;
   private boolean isStopped;
-  private boolean isWorking;
   private int tcpPort;
 
   public static void main(String args[]) throws Exception {
@@ -37,7 +36,6 @@ public class Worker implements Runnable {
 
   public Worker(int tcpPort) {
     isStopped = true;
-    isWorking = false;
     this.tcpPort = tcpPort;
   }
 
@@ -50,12 +48,9 @@ public class Worker implements Runnable {
   }
 
 
-  public void shutDown() {
-    isStopped = true;
-  }
 
   public void stop() {
-    isWorking = true;
+    isStopped = true;
   }
 
   public boolean isStopped() {
@@ -68,24 +63,21 @@ public class Worker implements Runnable {
 
   @Override public void run() {
     isStopped = true;
-    while (!isStopped()) {
-      try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
-        Socket connectionToMaster = workerSocket.accept();
+    try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
+      Socket connectionToMaster = workerSocket.accept();
+      while (!isStopped()) {
         Map<InetAddress, ParamServerSettings> paramServers = new HashMap<>();
         DataSet dataset = initialize(connectionToMaster, paramServers);
         ModelReplica model = new ModelReplica(paramServers, dataset);
         new Thread(model).start();
-        isWorking = true;
         BufferedReader buf =
             new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
-        while (isWorking) {
-          String command = buf.readLine();
-          // TODO: handle requests from master and sends report back to master.
-        }
+        String command = buf.readLine();
+        // TODO: handle requests from master and sends report back to master.
         model.stop();
-      } catch (IOException e) {
-        e.printStackTrace();
       }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 

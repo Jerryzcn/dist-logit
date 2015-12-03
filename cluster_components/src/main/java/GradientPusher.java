@@ -5,7 +5,7 @@ import java.net.InetAddress;
  */
 public class GradientPusher implements Runnable {
 
-  public GradientPusher(float[] parameters, InetAddress address, int port) {
+  public GradientPusher(float[] gradient, InetAddress address, int port) {
 
   }
 

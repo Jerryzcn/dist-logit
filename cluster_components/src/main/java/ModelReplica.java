@@ -15,13 +15,20 @@ public class ModelReplica implements Runnable {
   private final DataSet dataset;
   private float[] w;
   private final ExecutorService pool;
+  private final float learningRate;
+  private final float lambda;
+  private final int batchSize;
 
-  public ModelReplica(Map<InetAddress, ParamServerSettings> paramServers, DataSet dataset) {
+  public ModelReplica(Map<InetAddress, ParamServerSettings> paramServers, DataSet dataset,
+      float learningRate, float lambda, int batchSize) {
     this.dataset = dataset;
     isStopped = true;
     w = new float[dataset.getFeatures().columns()];
     this.paramServers = paramServers;
     this.pool = Executors.newFixedThreadPool(NUM_OF_THREADS);
+    this.learningRate = learningRate;
+    this.lambda = lambda;
+    this.batchSize = batchSize;
   }
 
   @Override public void run() {
@@ -35,9 +42,21 @@ public class ModelReplica implements Runnable {
           new ParameterPuller(address, settings.downPort, settings.lowIndex, settings.highIndex);
       i++;
     }
+    for (ParameterPuller puller : pullers) {
+      pool.execute(puller);
+    }
+    StochasticGradientDescent sgd =
+        new StochasticGradientDescent(new L2RegLogisticDenseLoss(), dataset, learningRate, lambda,
+            batchSize);
+    LossGrad lossGrad;
     while (!isStopped()) {
-      // TODO: download params
       // TODO: upload gradient
+      synchronized (w) {
+        lossGrad = sgd.getUpdate(w);
+      }
+      for (i = 0; i < paramServers.size(); i++) {
+        new GradientPusher(lossGrad.gradient, ); //TODO: finish this!
+      }
     }
   }
 
