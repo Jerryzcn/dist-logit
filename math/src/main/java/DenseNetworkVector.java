@@ -1,3 +1,5 @@
+import org.nd4j.linalg.api.ndarray.INDArray;
+
 import java.nio.ByteBuffer;
 
 /** Read and write vector to bytes with timestamp for passing in network */
@@ -34,8 +36,8 @@ public class DenseNetworkVector {
   }
 
   public void setVector(float[] vector) {
-    setTimestamp(System.currentTimeMillis());
     this.vector = vector;
+    setTimestamp(System.currentTimeMillis());
   }
 
   public void setTimestamp(long timestamp) {
@@ -53,5 +55,12 @@ public class DenseNetworkVector {
       buf.putFloat(f);
     }
     return buf.array();
+  }
+
+  public void setVector(INDArray grad) {
+    for (int i = 0; i < grad.length(); i++) {
+      vector[i] = grad.getFloat(i);
+    }
+    setTimestamp(System.currentTimeMillis());
   }
 }

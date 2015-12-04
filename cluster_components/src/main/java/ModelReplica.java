@@ -1,4 +1,6 @@
+import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.indexing.INDArrayIndex;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
 import java.lang.reflect.Parameter;
@@ -11,7 +13,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * TODO:
+ * Run the optimization on the local copy of the model.
+ * Pushes and pulls updates to and from parameter servers.
  */
 public class ModelReplica implements Runnable {
   private static final int NUM_OF_THREADS = 6;
@@ -62,9 +65,13 @@ public class ModelReplica implements Runnable {
         i = 0;
         for (InetAddress address : paramServers.keySet()) {
           ParamServerSettings settings = paramServers.get(address);
-          new GradientPusher(
-              lossGrad.gradient.get(NDArrayIndex.interval(settings.lowIndex, settings.highIndex)),
-              sockets[i], address, settings.upPort);
+          // TODO: allocation in heap. need optimization in the future
+          DenseNetworkVector update =
+              new DenseNetworkVector(settings.highIndex - settings.lowIndex);
+          INDArray grad =
+              lossGrad.gradient.get(NDArrayIndex.interval(settings.lowIndex, settings.highIndex));
+          update.setVector(grad);
+          new GradientPusher(update, sockets[i], address, settings.upPort);
           i++;
         }
       }

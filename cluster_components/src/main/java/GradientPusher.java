@@ -1,5 +1,7 @@
 import org.nd4j.linalg.api.ndarray.INDArray;
 
+import java.io.IOException;
+import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 
@@ -9,9 +11,10 @@ public class GradientPusher implements Runnable {
   private final InetAddress address;
   private final int port;
   private final DatagramSocket socket;
-  private final INDArray gradient;
+  private final DenseNetworkVector gradient;
 
-  public GradientPusher(INDArray gradient, DatagramSocket socket, InetAddress address, int port) {
+  public GradientPusher(DenseNetworkVector gradient, DatagramSocket socket, InetAddress address,
+      int port) {
     this.gradient = gradient;
     this.socket = socket;
     this.address = address;
@@ -20,5 +23,11 @@ public class GradientPusher implements Runnable {
 
   @Override public void run() {
     // TODO: implement this.
+    DatagramPacket packet = new DatagramPacket(gradient.getBytes(), gradient.size(), address, port);
+    try {
+      socket.send(packet);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 }
