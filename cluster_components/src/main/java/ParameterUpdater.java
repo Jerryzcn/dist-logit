@@ -6,6 +6,7 @@ import java.net.SocketException;
 
 /** Update the parameters in parameter servers */
 public class ParameterUpdater implements Runnable, Closeable {
+  private static final long TIME_BOUND = 1000L;
   private final DatagramSocket socket;
 
   private DenseNetworkVector gradient;
@@ -26,9 +27,11 @@ public class ParameterUpdater implements Runnable, Closeable {
       try {
         socket.receive(new DatagramPacket(buf, buf.length));
         gradient.readBytes(buf);
-        float[] update = gradient.getVector();
-        for (int i = 0; i < update.length; i++) {
-          parameters[i] = update[i];
+        if (!isStale(gradient)) {
+          float[] update = gradient.getVector();
+          for (int i = 0; i < update.length; i++) {
+            parameters[i] = update[i];
+          }
         }
       } catch (SocketException e) {
         e.printStackTrace();
@@ -36,6 +39,10 @@ public class ParameterUpdater implements Runnable, Closeable {
         e.printStackTrace();
       }
     }
+  }
+
+  public boolean isStale(DenseNetworkVector vector) {
+    return System.currentTimeMillis() - vector.getTimestamp() < TIME_BOUND;
   }
 
   public int getLocalPort() {

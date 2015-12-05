@@ -20,6 +20,7 @@ public class StochasticGradientDescentTest {
   private static final float LEARNING_RATE = 0.1f;
   private static final float LAMBDA = 0.1f;
   private static final int BATCH_SIZE = 1;
+  private static final float[] HYPER_PARAMS = new float[] {LEARNING_RATE, LAMBDA, BATCH_SIZE};
 
   private DenseLossFunction testLoss;
   private DataSet dataset;
@@ -30,9 +31,7 @@ public class StochasticGradientDescentTest {
         new int[] {TEST_LABELS.length, TEST_FEATURES.length / TEST_LABELS.length}),
         Nd4j.create(TEST_LABELS, new int[] {TEST_LABELS.length, 1}));
     testLoss = new L2RegLogisticDenseLoss();
-    sgd =
-        new StochasticGradientDescent(new L2RegLogisticDenseLoss(), dataset, LEARNING_RATE, LAMBDA,
-            BATCH_SIZE);
+    sgd = new StochasticGradientDescent(new L2RegLogisticDenseLoss(), dataset, HYPER_PARAMS);
   }
 
   @Test public void testGetUpdateLoss() {
