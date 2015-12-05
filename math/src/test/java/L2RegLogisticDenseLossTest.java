@@ -36,7 +36,7 @@ public class L2RegLogisticDenseLossTest {
   }
 
   @Test public void testL2Grad() {
-    float[] weights = TEST_WEIGHTS;
+    float[] weights = TEST_WEIGHTS.clone();
     LossGrad result = null;
     for (int i = 0; i < ITERATION; i++) {
       result = testLoss.compute(dataset, weights, LAMBDA);

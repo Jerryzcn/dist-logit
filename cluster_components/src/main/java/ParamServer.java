@@ -28,8 +28,13 @@ public class ParamServer implements Runnable {
     }
 
     int port = Integer.parseInt(args[0]);
-    Worker worker = new Worker(port);
-    worker.run();
+    ParamServer paramServer = null;
+    try {
+      paramServer = new ParamServer(port);
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
+    paramServer.run();
   }
 
   private static void printUsage() {
@@ -40,22 +45,20 @@ public class ParamServer implements Runnable {
    * Constructs a parameter server.
    *
    * @param port the tcp port to master
-   * @param lo   the lower bound of the feature index
-   * @param hi   the upper bound of the feature index
    */
-  public ParamServer(int port, int lo, int hi) throws IOException {
+  public ParamServer(int port) throws IOException {
     masterSocket = new ServerSocket(port);
-    parameters = new float[hi - lo];
+    parameters = null;
     isStopped = true;
   }
 
   @Override public void run() {
     isStopped = false;
-    try (Socket masterConnection = masterSocket.accept();
-        BufferedInputStream inBuf = new BufferedInputStream(masterConnection.getInputStream());
-        BufferedOutputStream outBuf = new BufferedOutputStream(masterConnection.getOutputStream());
-        ParameterUpdater paramUpdaters = new ParameterUpdater(parameters);
-        PullHandler pullHandler = new PullHandler(parameters)) {
+    try (final Socket masterConnection = masterSocket.accept();
+        final BufferedInputStream inBuf = new BufferedInputStream(masterConnection.getInputStream());
+        final BufferedOutputStream outBuf = new BufferedOutputStream(masterConnection.getOutputStream());
+        final ParameterUpdater paramUpdaters = new ParameterUpdater(parameters);
+        final PullHandler pullHandler = new PullHandler(parameters)) {
       initialize(inBuf, outBuf);
       outBuf.write(Message.INITIALIZED.getBytes("UTF-8"));
       outBuf.flush();

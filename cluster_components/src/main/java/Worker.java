@@ -1,5 +1,6 @@
 import org.nd4j.linalg.dataset.DataSet;
 
+import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -18,9 +19,9 @@ public class Worker implements Runnable {
 
   private static final int NUM_OF_THREADS = 4;
 
+  private float[] hyperParams;
   private int workerId;
   private boolean isStopped;
-  private boolean isWorking;
   private int tcpPort;
 
   public static void main(String args[]) throws Exception {
@@ -36,7 +37,6 @@ public class Worker implements Runnable {
 
   public Worker(int tcpPort) {
     isStopped = true;
-    isWorking = false;
     this.tcpPort = tcpPort;
   }
 
@@ -49,12 +49,9 @@ public class Worker implements Runnable {
   }
 
 
-  public void shutDown() {
-    isStopped = true;
-  }
 
   public void stop() {
-    isWorking = true;
+    isStopped = true;
   }
 
   public boolean isStopped() {
@@ -67,30 +64,34 @@ public class Worker implements Runnable {
 
   @Override public void run() {
     isStopped = true;
-    while (!isStopped()) {
-      try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
-        Socket connectionToMaster = workerSocket.accept();
-        Map<InetAddress, Integer> paramServers = new HashMap<>();
-        DataSet dataset = initialize(connectionToMaster, paramServers);
-        ModelReplica model = new ModelReplica(paramServers, dataset);
+    try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
+      Socket connectionToMaster = workerSocket.accept();
+      Map<InetAddress, ParamServerSettings> paramServers = new HashMap<>();
+      DataSet dataset = initialize(connectionToMaster, paramServers);
+      while (!isStopped()) {
+        ModelReplica model = new ModelReplica(paramServers, dataset, hyperParams);
         new Thread(model).start();
-        isWorking = true;
         BufferedReader buf =
             new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
-        while (isWorking) {
-          String command = buf.readLine();
-          // TODO: handle requests from master and sends report back to master.
-        }
+        String command = buf.readLine();
+        // TODO: handle requests from master and sends report back to master.
         model.stop();
-      } catch (IOException e) {
-        e.printStackTrace();
       }
+    } catch (IOException e) {
+      e.printStackTrace();
     }
   }
 
   // Sets relevant information for the worker.
-  private DataSet initialize(Socket connectionToMaster, Map<InetAddress, Integer> paramServers) {
+  private DataSet initialize(Socket connectionToMaster,
+      Map<InetAddress, ParamServerSettings> paramServers) {
     // TODO: get packets from master and sets training data, label, etc.
+    try (final BufferedInputStream in = new BufferedInputStream(
+        connectionToMaster.getInputStream())) {
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
     return null;
   }
 
