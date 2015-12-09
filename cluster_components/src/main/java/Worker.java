@@ -14,6 +14,7 @@ public class Worker implements Runnable {
   //                     udp from workers to parameter servers
 
   private static final int NUM_OF_THREADS = 4;
+  private static final int BUFFER_SIZE = 8192;
 
   // name of values from configuration file that worker will store and process
   private static final String[] CONFIG_VALUES = new String[]
@@ -93,6 +94,26 @@ public class Worker implements Runnable {
     try (final BufferedInputStream in = new BufferedInputStream(
         connectionToMaster.getInputStream())) {
       // TODO: parse stream check from the
+      int textByteCutoff = 5; // This is a arbitrary number to tell user get from header,
+                              // String first then byte second
+      // used the same logic as @Jerry
+      int res = 0;
+      int totalReadin = 0;
+      byte[] buf = new byte[BUFFER_SIZE];
+      while (in.available() < 1);
+      do {
+        res = in.read(buf);
+        if (res != -1) {
+          totalReadin += res;
+          if (totalReadin < textByteCutoff) {
+            // TODO: parse into text
+          } else {
+            // TODO: parse into byte
+
+          }
+        }
+//        outBuf.flush();
+      } while (res != -1);
 
     } catch (IOException e) {
       e.printStackTrace();
