@@ -38,6 +38,8 @@ public class Client {
       while (cfgScanner.hasNextLine()) {
         outBuf.write((cfgScanner.nextLine() + "\n").getBytes("UTF-8"));
       }
+
+      outBuf.write("header_end\n".getBytes());
       outBuf.flush();
       // listener should be terminated by master signaling it by closing the socket.
       Thread listener = new Thread(new Runnable() {

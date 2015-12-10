@@ -31,12 +31,18 @@ public class Master {
   public Map<String, String> params;
   public int port;
 
-  public List<SocketAddress> workers;
-  public List<SocketAddress> parameterServers;
+  public List<InetSocketAddress> workerAddresses;
+  public List<InetSocketAddress> parameterServerAddresses;
+
+  public List<WorkerConnection> workers;
+  public List<ParamServerConnection> parameterServers;
+
 
   public Master(int port) {
     this.port = port;
     this.params = new HashMap<>();
+    this.workerAddresses = new ArrayList<>();
+    this.parameterServerAddresses = new ArrayList<>();
     this.workers = new ArrayList<>();
     this.parameterServers = new ArrayList<>();
 
@@ -56,9 +62,9 @@ public class Master {
             String param = line.substring(0, pos);
             String value = line.substring(pos + 1);
             if (param.equals("worker")) {
-              workers.add(NetworkUtil.getAddress(value));
+              workerAddresses.add(NetworkUtil.getAddress(value));
             } else if (param.equals("parameter_server")) {
-              parameterServers.add(NetworkUtil.getAddress(value));
+              parameterServerAddresses.add(NetworkUtil.getAddress(value));
             } else
               params.put(param, value);
           } else if (line.equals("header_end")) {
@@ -75,8 +81,18 @@ public class Master {
 
   private void init() {
 
-    for (SocketAddress worker : workers) {
-      Thread thread = new Thread();
+    for (InetSocketAddress worker : workerAddresses) {
+
+      try (
+        final Socket workerSocket = new Socket(worker.getAddress(), worker.getPort());
+      ) {
+        WorkerConnection workerConnection = new WorkerConnection(this, workerSocket);
+        workers.add(workerConnection);
+        Thread thread = new Thread(workerConnection);
+        thread.run();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
     }
   }
 

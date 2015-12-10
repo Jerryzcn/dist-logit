@@ -1,3 +1,6 @@
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.IOException;
 import java.net.Socket;
 
 public class ParamServerConnection implements Runnable {
@@ -13,5 +16,11 @@ public class ParamServerConnection implements Runnable {
     @Override
     public void run() {
 
+        try (final BufferedInputStream inBuf = new BufferedInputStream(socket.getInputStream());
+             final BufferedOutputStream outBuf = new BufferedOutputStream(socket.getOutputStream())) {
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }
