@@ -1,14 +1,10 @@
 import org.nd4j.linalg.dataset.DataSet;
 
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Calculates the gradient vector to update the parameters.
@@ -18,6 +14,13 @@ public class Worker implements Runnable {
   //                     udp from workers to parameter servers
 
   private static final int NUM_OF_THREADS = 4;
+  private static final int BUFFER_SIZE = 8192;
+
+  // name of values from configuration file that worker will store and process
+  private static final String[] CONFIG_VALUES = new String[]
+      {"log_path", "reg_constant", "batch_size", "learning_rate"};
+  // store the names into a set checker
+  private static final Set<String> CONFIG = new HashSet<>(Arrays.asList(CONFIG_VALUES));
 
   private float[] hyperParams;
   private int workerId;
@@ -67,6 +70,8 @@ public class Worker implements Runnable {
     try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
       Socket connectionToMaster = workerSocket.accept();
       Map<InetAddress, ParamServerSettings> paramServers = new HashMap<>();
+
+      // return this dataset
       DataSet dataset = initialize(connectionToMaster, paramServers);
       while (!isStopped()) {
         ModelReplica model = new ModelReplica(paramServers, dataset, hyperParams);
@@ -88,6 +93,27 @@ public class Worker implements Runnable {
     // TODO: get packets from master and sets training data, label, etc.
     try (final BufferedInputStream in = new BufferedInputStream(
         connectionToMaster.getInputStream())) {
+      // TODO: parse stream check from the
+      int textByteCutoff = 5; // This is a arbitrary number to tell user get from header,
+                              // String first then byte second
+      // used the same logic as @Jerry
+      int res = 0;
+      int totalReadin = 0;
+      byte[] buf = new byte[BUFFER_SIZE];
+      while (in.available() < 1);
+      do {
+        res = in.read(buf);
+        if (res != -1) {
+          totalReadin += res;
+          if (totalReadin < textByteCutoff) {
+            // TODO: parse into text
+          } else {
+            // TODO: parse into byte
+
+          }
+        }
+//        outBuf.flush();
+      } while (res != -1);
 
     } catch (IOException e) {
       e.printStackTrace();
