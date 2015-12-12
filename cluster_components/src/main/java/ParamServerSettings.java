@@ -6,10 +6,10 @@
  *  highIndex of manipulate data set
  */
 public class ParamServerSettings {
-  private final int upPort;
-  private final int downPort;
-  private final int lowIndex;
-  private final int highIndex;
+  public final int upPort;
+  public final int downPort;
+  public final int lowIndex;
+  public final int highIndex;
 
   private ParamServerSettings(Builder builder) {
     upPort = builder.upPort;

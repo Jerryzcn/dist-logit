@@ -1,4 +1,3 @@
-
 import java.io.*;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
@@ -17,7 +16,7 @@ import java.util.*;
  * Periodically send command to parameter server to write the model to disk, and evaluates the model
  * on eval data.
  */
-public class Master implements Runnable{
+public class Master implements Runnable {
   @Override public void run() {
 
   }
@@ -29,6 +28,7 @@ public class Master implements Runnable{
   public enum Config {
     TRAINING_DATA, EVAL_DATA, MODEL_OUTPUT, LOG_PATH, REG_CONSTANT, BATCH_SIZE
   }
+
 
   private final static int BUFFER_SIZE = 1024;
 
@@ -58,11 +58,11 @@ public class Master implements Runnable{
     this.parameterServers = new ArrayList<>();
 
     try (final ServerSocket clientServer = new ServerSocket(port);
-         final Socket clientSocket = clientServer.accept();
-         final BufferedReader inBuf = new BufferedReader(new InputStreamReader(
-                 clientSocket.getInputStream()));
-         final BufferedOutputStream outBuf = new BufferedOutputStream(
-                 clientSocket.getOutputStream());
+        final Socket clientSocket = clientServer.accept();
+        final BufferedReader inBuf = new BufferedReader(
+            new InputStreamReader(clientSocket.getInputStream()));
+        final BufferedOutputStream outBuf = new BufferedOutputStream(
+            clientSocket.getOutputStream());
     ) {
       String line;
       boolean readHeader = true;
@@ -100,17 +100,20 @@ public class Master implements Runnable{
       ) {
 
         Map<InetAddress, ParamServerSettings> paramServerSettingsMap = new HashMap<>();
+        ParamServerSettings.Builder[] builders =
+            new ParamServerSettings.Builder[parameterServerAddresses.size()];
+        for (int i = 0; i < builders.length; i++) {
+          builders[i] = new ParamServerSettings.Builder();
+        }
         for (int i = 0; i < parameterServerAddresses.size(); i++) {
           int upPort = 0;
           int downPort = 0;
           int lowIndex = 0;
           int highIndex = 0;
-          ParamServerSettings.Builder builder = new ParamServerSettings.Builder();
           // TODO: pass this builder around to set all the parameters
-
           paramServerSettingsMap.put(parameterServerAddresses.get(i).getAddress(),
               //              new ParamServerSettings(upPort, downPort, lowIndex, highIndex));
-              builder.build());
+              builders[i].build());
         }
 
         // set Hyper Params in Config: [0 => learning_rate, 1 => reg_constant, 2 => batch_size]
@@ -123,7 +126,7 @@ public class Master implements Runnable{
         // manipulate the training data
         int trainingDataWidth = 0;
         ArrayList<Float> trainingData = new ArrayList<>(INI_TRAIN_DATA_SIZE);
-        while(dataScan.hasNextLine()) {
+        while (dataScan.hasNextLine()) {
 
           // TODO: string tokenizer is way faster then split, will change it later
           String[] lineData = dataScan.nextLine().split(",");
@@ -136,14 +139,10 @@ public class Master implements Runnable{
           trainingDataWidth = lineData.length;
         }
 
-        WorkerInitInfo info = new WorkerInitInfo(
-            paramServerSettingsMap,
-            hyperPrams,
+        WorkerInitInfo info = new WorkerInitInfo(paramServerSettingsMap, hyperPrams,
 
             // TODO: this is not right, copy all the elments to array
-            trainingData,
-            trainingDataWidth,
-            );
+            trainingData, trainingDataWidth, );
 
         WorkerConnection workerConnection = new WorkerConnection(workerSocket, info);
         workers.add(workerConnection);
