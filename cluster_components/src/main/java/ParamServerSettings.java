@@ -35,17 +35,17 @@ public class ParamServerSettings {
     }
 
     public Builder setDownPort(int downPort) {
-      this.upPort = downPort;
+      this.downPort = downPort;
       return this;
     }
 
     public Builder setLowIndex(int lowIndex) {
-      this.upPort = lowIndex;
+      this.lowIndex = lowIndex;
       return this;
     }
 
-    public Builder sethighIndex(int highIndex) {
-      this.upPort = highIndex;
+    public Builder setHighIndex(int highIndex) {
+      this.highIndex = highIndex;
       return this;
     }
 

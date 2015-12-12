@@ -4,6 +4,7 @@ import java.net.SocketAddress;
 public class NetworkUtil {
 
     public final static int FLOAT_SIZE = 32;
+    public final static int INT_SIZE = 32;
 
     public static InetSocketAddress getAddress(String address) {
         String[] strs = address.split(":");
