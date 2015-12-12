@@ -1,10 +1,9 @@
-import java.io.BufferedInputStream;
-import java.io.BufferedOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.nio.ByteBuffer;
 import java.util.Map;
 
 /**
@@ -12,6 +11,7 @@ import java.util.Map;
  * Supplies the parameters to the worker, and update the parameter as worker send the gradient back.
  */
 public class ParamServer implements Runnable {
+  private static final int BUFFER_SIZE = 8;
   // Connections needed: tcp from master to parameter servers
   //                     udp from workers to parameter servers
 
@@ -55,18 +55,27 @@ public class ParamServer implements Runnable {
   @Override public void run() {
     isStopped = false;
     try (final Socket masterConnection = masterSocket.accept();
-        final BufferedInputStream inBuf = new BufferedInputStream(masterConnection.getInputStream());
-        final BufferedOutputStream outBuf = new BufferedOutputStream(masterConnection.getOutputStream());
+        final BufferedReader inBuf = new BufferedReader(
+            new InputStreamReader(masterConnection.getInputStream()));
+        final BufferedOutputStream outBuf = new BufferedOutputStream(
+            masterConnection.getOutputStream());
         final ParameterUpdater paramUpdaters = new ParameterUpdater(parameters);
         final PullHandler pullHandler = new PullHandler(parameters)) {
-      initialize(inBuf, outBuf);
+      int pushPort = paramUpdaters.getLocalPort();
+      int pullPort = pullHandler.getLocalPort();
+      initialize(inBuf, outBuf, pushPort, pullPort);
       outBuf.write(Message.INITIALIZED.getBytes("UTF-8"));
       outBuf.flush();
       new Thread(paramUpdaters).start();
-      int pushPort = paramUpdaters.getLocalPort();
-      int pullPort = pullHandler.getLocalPort();
       while (!isStopped()) {
         // TODO: communicate with master.
+        String command = inBuf.readLine();
+        switch (command) {
+          case Message.STOP:
+            stop();
+          case Message.GET_WEIGHT:
+            getWeight(outBuf);
+        }
       }
     } catch (IOException e) {
       e.printStackTrace();
@@ -76,7 +85,6 @@ public class ParamServer implements Runnable {
   public boolean isStopped() {
     return isStopped;
   }
-
 
   /** Stops the parameter server */
   public void stop() {
@@ -88,7 +96,20 @@ public class ParamServer implements Runnable {
     }
   }
 
-  private void initialize(BufferedInputStream inBuf, BufferedOutputStream outBuf) {
+  private void initialize(BufferedReader inBuf, BufferedOutputStream outBuf, int pushPort,
+      int pullPort) throws IOException {
     // TODO: setup connection with workers.
+    ByteBuffer outToMaster = ByteBuffer.allocate(BUFFER_SIZE);
+    outBuf.write(outToMaster.putInt(pushPort).putInt(pullPort).array());
+  }
+
+  public void getWeight(BufferedOutputStream outBuf) throws IOException {
+    // TODO:
+    ByteBuffer buffer = ByteBuffer.allocate(NetworkUtil.FLOAT_SIZE);
+    for (float weight : parameters) {
+      outBuf.write(buffer.putFloat(weight).array());
+      buffer.rewind();
+    }
+    outBuf.flush();
   }
 }
