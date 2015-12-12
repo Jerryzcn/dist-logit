@@ -38,7 +38,7 @@ public class ParamServer implements Runnable {
   }
 
   private static void printUsage() {
-    System.out.println("usage: <Server port> <Master address>:<Master port>");
+    System.out.println("usage: <Server port>");
   }
 
   /**

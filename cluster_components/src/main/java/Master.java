@@ -1,8 +1,9 @@
+
 import java.io.*;
+import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketAddress;
 import java.util.*;
 
 /**
@@ -16,7 +17,10 @@ import java.util.*;
  * Periodically send command to parameter server to write the model to disk, and evaluates the model
  * on eval data.
  */
-public class Master {
+public class Master implements Runnable{
+  @Override public void run() {
+
+  }
   // Connections needed: tcp from master to workers
   //                     tcp from client to master
   //                     tcp from master to parameter serverss
@@ -28,14 +32,21 @@ public class Master {
 
   private final static int BUFFER_SIZE = 1024;
 
-  public Map<String, String> params;
-  public int port;
+  // pre-define a data length to avoid expending the array list
+  private final static int INI_TRAIN_DATA_SIZE = 10000;
 
-  public List<InetSocketAddress> workerAddresses;
-  public List<InetSocketAddress> parameterServerAddresses;
+  private Map<String, String> params;
+  private int port;
 
-  public List<WorkerConnection> workers;
-  public List<ParamServerConnection> parameterServers;
+  private List<InetSocketAddress> workerAddresses;
+  private List<InetSocketAddress> parameterServerAddresses;
+
+  private List<WorkerConnection> workers;
+  private List<ParamServerConnection> parameterServers;
+
+  // store the
+  private float[][] trainingData;
+  private float[][] testData;
 
 
   public Master(int port) {
@@ -84,9 +95,57 @@ public class Master {
     for (InetSocketAddress worker : workerAddresses) {
 
       try (
-        final Socket workerSocket = new Socket(worker.getAddress(), worker.getPort());
+          final Socket workerSocket = new Socket(worker.getAddress(), worker.getPort());
+          final Scanner dataScan = new Scanner(new File(params.get("training_data")))
       ) {
-        WorkerConnection workerConnection = new WorkerConnection(this, workerSocket);
+
+        Map<InetAddress, ParamServerSettings> paramServerSettingsMap = new HashMap<>();
+        for (int i = 0; i < parameterServerAddresses.size(); i++) {
+          int upPort = 0;
+          int downPort = 0;
+          int lowIndex = 0;
+          int highIndex = 0;
+          ParamServerSettings.Builder builder = new ParamServerSettings.Builder();
+          // TODO: pass this builder around to set all the parameters
+
+          paramServerSettingsMap.put(parameterServerAddresses.get(i).getAddress(),
+              //              new ParamServerSettings(upPort, downPort, lowIndex, highIndex));
+              builder.build());
+        }
+
+        // set Hyper Params in Config: [0 => learning_rate, 1 => reg_constant, 2 => batch_size]
+        // hard-code it for now, maybe later as well... who knows...
+        float[] hyperPrams = new float[3];
+        hyperPrams[0] = Float.parseFloat(params.get("learning_rate"));
+        hyperPrams[1] = Float.parseFloat(params.get("reg_constant"));
+        hyperPrams[2] = Float.parseFloat(params.get("batch_size"));
+
+        // manipulate the training data
+        int trainingDataWidth = 0;
+        ArrayList<Float> trainingData = new ArrayList<>(INI_TRAIN_DATA_SIZE);
+        while(dataScan.hasNextLine()) {
+
+          // TODO: string tokenizer is way faster then split, will change it later
+          String[] lineData = dataScan.nextLine().split(",");
+          for (int i = 0; i < lineData.length; i++) {
+            trainingData.add(Float.parseFloat(lineData[i]));
+          }
+
+          // TODO: this is really really really bad style cuz it's updating it again and again
+          // will fix it later
+          trainingDataWidth = lineData.length;
+        }
+
+        WorkerInitInfo info = new WorkerInitInfo(
+            paramServerSettingsMap,
+            hyperPrams,
+
+            // TODO: this is not right, copy all the elments to array
+            trainingData,
+            trainingDataWidth,
+            );
+
+        WorkerConnection workerConnection = new WorkerConnection(workerSocket, info);
         workers.add(workerConnection);
         Thread thread = new Thread(workerConnection);
         thread.run();

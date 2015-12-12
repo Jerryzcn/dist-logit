@@ -1,9 +1,7 @@
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
-import org.nd4j.linalg.indexing.INDArrayIndex;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
-import java.lang.reflect.Parameter;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
