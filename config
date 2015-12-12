@@ -1,0 +1,9 @@
+training_data = train.csv
+eval_data = test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.1
+batch_size = 100
+learning_rate = 0.01
+worker = localhost:12345
+parameter_server = localhost:13456
