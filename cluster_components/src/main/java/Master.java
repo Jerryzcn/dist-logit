@@ -1,4 +1,5 @@
 import com.google.common.primitives.Floats;
+import org.apache.log4j.Logger;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
 
@@ -26,16 +27,10 @@ public class Master implements Runnable {
   //                     tcp from client to master
   //                     tcp from master to parameter serverss
 
-
-  public enum Config {
-    TRAINING_DATA, EVAL_DATA, MODEL_OUTPUT, LOG_PATH, REG_CONSTANT, BATCH_SIZE
-  }
-
-
-  private final static int BUFFER_SIZE = 1024;
-
   // pre-define a data length to avoid expending the array list
-  private final static int INI_TRAIN_DATA_SIZE = 10000;
+  private final static int INIT_TRAIN_DATA_SIZE = 10000;
+
+  private static Logger logger = Logger.getLogger(Master.class);
 
   private Map<String, String> params;
   private int port;
@@ -52,6 +47,7 @@ public class Master implements Runnable {
   // we want to keep worker socket and param socket open
   private List<Socket> workerSockets;
   private List<Socket> paramSockets;
+  private boolean isStopped;
 
   public Master(int port) {
     this.port = port;
@@ -66,12 +62,10 @@ public class Master implements Runnable {
 
   private void init() {
 
-    try (
-        final Scanner dataScan = new Scanner(new File(params.get("training_data")))
-    ) {
+    try (final Scanner dataScan = new Scanner(new File(params.get("training_data")))) {
 
       // read, shuffle, shard training data.
-      List<String> lineList = new ArrayList<>();
+      List<String> lineList = new ArrayList<>(INIT_TRAIN_DATA_SIZE);
       while (dataScan.hasNextLine()) {
         lineList.add(dataScan.nextLine());
       }
@@ -84,11 +78,11 @@ public class Master implements Runnable {
       String[] lineData = null;
 
       // manipulate the training data
-//      ArrayList<Float> tempTrainingData = new ArrayList<>(INI_TRAIN_DATA_SIZE);
+      //      ArrayList<Float> tempTrainingData = new ArrayList<>(INI_TRAIN_DATA_SIZE);
       int currentWorker = 0;
       for (int i = 0; i < lineList.size(); i++) {
         if (i % eachWorkerLoad == 0) {
-          currentWorker = i/eachWorkerLoad;
+          currentWorker = i / eachWorkerLoad;
           dividedData[currentWorker] = new ArrayList<>();
         }
 
@@ -100,7 +94,7 @@ public class Master implements Runnable {
       int trainingDataWidth = lineData.length;
 
       // convert array list to array
-//      float[] trainingData = Floats.toArray(tempTrainingData);
+      //      float[] trainingData = Floats.toArray(tempTrainingData);
 
       // divide to to worker
 
@@ -155,9 +149,8 @@ public class Master implements Runnable {
 
       for (int i = 0; i < workerSockets.size(); i++) {
         float[] workerData = Floats.toArray(dividedData[i]);
-
-        WorkerConnection workerConnection = new WorkerConnection(
-            workerSockets.get(i), info, workerData);
+        WorkerConnection workerConnection =
+            new WorkerConnection(workerSockets.get(i), info, workerData);
         workers.add(workerConnection);
         new Thread(workerConnection).start();
       }
@@ -170,12 +163,14 @@ public class Master implements Runnable {
   }
 
   @Override public void run() {
+    isStopped = false;
     try (final ServerSocket clientServer = new ServerSocket(port);
         final Socket clientSocket = clientServer.accept();
         final BufferedReader inBuf = new BufferedReader(
             new InputStreamReader(clientSocket.getInputStream()));
         final BufferedOutputStream outBuf = new BufferedOutputStream(clientSocket.getOutputStream())
     ) {
+      logger.info("client connected");
       String line;
       boolean readHeader = true;
       while ((line = inBuf.readLine()) != null) {
@@ -205,10 +200,25 @@ public class Master implements Runnable {
       }
 
       init();
+
+      while (!isStopped()) {
+        String command = inBuf.readLine();
+        if (command.equals(Message.STOP)) {
+          stop();
+        }
+      }
     } catch (IOException e) {
       System.err.println("Cannot connect to master");
       e.printStackTrace();
     }
+  }
+
+  public void stop() {
+    isStopped = true;
+  }
+
+  public boolean isStopped() {
+    return isStopped;
   }
 
   public static void main(String args[]) {

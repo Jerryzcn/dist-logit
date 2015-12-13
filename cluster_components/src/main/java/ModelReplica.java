@@ -56,10 +56,12 @@ public class ModelReplica implements Runnable {
         sockets[i] = new DatagramSocket();
       }
       while (!isStopped()) {
-        // TODO: upload gradient
         synchronized (w) {
           lossGrad = sgd.getUpdate(w);
         }
+
+        System.out.println(lossGrad);
+
         i = 0;
         for (InetAddress address : paramServers.keySet()) {
           ParamServerSettings settings = paramServers.get(address);
@@ -69,7 +71,7 @@ public class ModelReplica implements Runnable {
           INDArray grad =
               lossGrad.gradient.get(NDArrayIndex.interval(settings.lowIndex, settings.highIndex));
           update.setVector(grad);
-          new GradientPusher(update, sockets[i], address, settings.upPort);
+          pool.execute(new GradientPusher(update, sockets[i], address, settings.upPort));
           i++;
         }
       }
