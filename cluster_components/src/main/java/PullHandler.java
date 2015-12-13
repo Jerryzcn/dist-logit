@@ -17,6 +17,7 @@ public class PullHandler implements Runnable, Closeable {
 
   public PullHandler(float[] parameters) throws SocketException {
     this.socket = new DatagramSocket();
+    this.parameters = parameters;
   }
 
   @Override public void run() {

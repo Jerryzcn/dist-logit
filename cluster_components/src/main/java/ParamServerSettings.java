@@ -1,3 +1,5 @@
+import java.io.Serializable;
+
 /**
  * The parameter server settings class that records
  *  upload port number
@@ -5,7 +7,7 @@
  *  lowIndex of manipulate data set
  *  highIndex of manipulate data set
  */
-public class ParamServerSettings {
+public class ParamServerSettings implements Serializable{
   public final int upPort;
   public final int downPort;
   public final int lowIndex;

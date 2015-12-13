@@ -80,7 +80,7 @@ public class ModelReplica implements Runnable {
         }
       }
     } catch (SocketException e) {
-      e.printStackTrace();
+      logger.fatal(e.getStackTrace());
     } finally {
       Arrays.stream(sockets).forEach(DatagramSocket::close);
     }

@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
@@ -5,6 +7,8 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 
 public class ParamServerConnection implements Runnable {
+
+  private static Logger logger = Logger.getLogger(ParamServerConnection.class);
 
   private ParamServerSettings.Builder builder;
   private Socket socket;
@@ -21,8 +25,9 @@ public class ParamServerConnection implements Runnable {
 
     try (final BufferedInputStream inBuf = new BufferedInputStream(socket.getInputStream());
         final BufferedOutputStream outBuf = new BufferedOutputStream(socket.getOutputStream())) {
-      outBuf.write(("" + paramLength + "/n").getBytes("UTF-8"));
+      outBuf.write(("" + paramLength + "\n").getBytes("UTF-8"));
       outBuf.flush();
+      logger.info("parameter vector length: " + paramLength);
       byte[] buf = new byte[NetworkUtil.INT_SIZE];
       inBuf.read(buf);
       ByteBuffer buffer = ByteBuffer.wrap(buf);

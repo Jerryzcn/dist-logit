@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import java.io.Closeable;
 import java.io.IOException;
 import java.net.DatagramPacket;
@@ -7,6 +9,9 @@ import java.net.SocketException;
 /** Update the parameters in parameter servers */
 public class ParameterUpdater implements Runnable, Closeable {
   private static final long TIME_BOUND = 1000L;
+
+  private static Logger logger = Logger.getLogger(ParameterUpdater.class);
+
   private final DatagramSocket socket;
 
   private DenseNetworkVector gradient;
@@ -34,8 +39,10 @@ public class ParameterUpdater implements Runnable, Closeable {
           }
         }
       } catch (SocketException e) {
+        logger.fatal(e);
         e.printStackTrace();
       } catch (IOException e) {
+        logger.fatal(e);
         e.printStackTrace();
       }
     }

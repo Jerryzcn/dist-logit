@@ -1,10 +1,12 @@
 import com.google.common.primitives.Floats;
 import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
-import org.nd4j.linalg.api.ndarray.INDArray;
-import org.nd4j.linalg.factory.Nd4j;
 
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.ServerSocket;
@@ -198,7 +200,7 @@ public class Master implements Runnable {
       }
 
       init();
-
+      logger.info("initialization finished.");
       while (!isStopped()) {
         String command = inBuf.readLine();
         if (command.equals(Message.STOP)) {
@@ -206,8 +208,7 @@ public class Master implements Runnable {
         }
       }
     } catch (IOException e) {
-      System.err.println("Cannot connect to master");
-      e.printStackTrace();
+      logger.fatal("Cannot connect to master", e);
     }
   }
 

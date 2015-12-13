@@ -1,4 +1,5 @@
 import org.apache.log4j.BasicConfigurator;
+import org.apache.log4j.Logger;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
@@ -19,6 +20,8 @@ public class Worker implements Runnable {
   //                     udp from workers to parameter servers
 
   // store the names into a set checker
+
+  private static Logger logger = Logger.getLogger(Worker.class);
 
   private boolean isStopped;
   private int tcpPort;
@@ -55,44 +58,50 @@ public class Worker implements Runnable {
   }
 
   @Override public void run() {
-    isStopped = true;
-    try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
-      Socket connectionToMaster = workerSocket.accept();
+    isStopped = false;
+    try (ServerSocket workerSocket = new ServerSocket(tcpPort);
+        Socket connectionToMaster = workerSocket.accept();
+        BufferedReader buf = new BufferedReader(
+            new InputStreamReader(connectionToMaster.getInputStream()))) {
 
+      logger.info("connected to master.");
       // return this data set
       DataSet dataset = initialize(connectionToMaster);
       ModelReplica model =
           new ModelReplica(info.paramServerSettingsMap, dataset, info.hyperParameters);
       new Thread(model).start();
-      try (BufferedReader buf = new BufferedReader(
-          new InputStreamReader(connectionToMaster.getInputStream()))) {
-        while (!isStopped()) {
-          String command = buf.readLine();
+
+      while (!isStopped()) {
+        String command = buf.readLine();
+        if (command != null) {
           if (command.equals(Message.STOP)) {
+            logger.info("stopping.");
             model.stop();
             stop();
           }
         }
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.fatal(e.getStackTrace());
     }
   }
 
   // Sets relevant information for the worker.
   private DataSet initialize(Socket connectionToMaster) {
     DataSet dataset = null;
-    try (final ObjectInputStream in = new ObjectInputStream(connectionToMaster.getInputStream())) {
+    try {
+      final ObjectInputStream in = new ObjectInputStream(connectionToMaster.getInputStream());
       info = (WorkerInitInfo) in.readObject();
       float[] data = (float[]) in.readObject();
       INDArray d = Nd4j.create(data,
           new int[] {data.length / info.trainingDataWidth, info.trainingDataWidth});
       dataset =
-          new DataSet(d.get(NDArrayIndex.interval(1, info.trainingDataWidth)), d.getColumn(0));
+          new DataSet(d.get(NDArrayIndex.all(), NDArrayIndex.interval(1, info.trainingDataWidth)),
+              d.getColumns(0));
     } catch (IOException e1) {
-      e1.printStackTrace();
+      logger.fatal(e1.getStackTrace());
     } catch (ClassNotFoundException e2) {
-      e2.printStackTrace();
+      logger.fatal(e2.getStackTrace());
     }
     return dataset;
   }

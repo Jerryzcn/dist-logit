@@ -1,3 +1,4 @@
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -26,6 +27,7 @@ public class ParamServer implements Runnable {
   private boolean isStopped;
 
   public static void main(String[] args) {
+    BasicConfigurator.configure();
     if (args.length != 1) {
       printUsage();
       return;
@@ -75,18 +77,20 @@ public class ParamServer implements Runnable {
         outBuf.flush();
         new Thread(paramUpdaters).start();
         while (!isStopped()) {
-          // TODO: communicate with master.
+          // communicate with master.
           String command = inBuf.readLine();
-          switch (command) {
-            case Message.STOP:
-              stop();
-            case Message.GET_WEIGHT:
-              getWeight(outBuf);
+          if (command != null) {
+            switch (command) {
+              case Message.STOP:
+                stop();
+              case Message.GET_WEIGHT:
+                getWeight(outBuf);
+            }
           }
         }
       }
     } catch (IOException e) {
-      logger.fatal(e);
+      logger.fatal(e.getStackTrace());
     }
   }
 
