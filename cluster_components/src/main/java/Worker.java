@@ -1,7 +1,9 @@
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.factory.NDArrayFactory;
 import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.INDArrayIndex;
+import org.nd4j.linalg.indexing.NDArrayIndex;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -20,8 +22,8 @@ public class Worker implements Runnable {
   private static final int BUFFER_SIZE = 8192;
 
   // name of values from configuration file that worker will store and process
-  private static final String[] CONFIG_VALUES = new String[]
-      {"log_path", "reg_constant", "batch_size", "learning_rate"};
+  private static final String[] CONFIG_VALUES =
+      new String[] {"log_path", "reg_constant", "batch_size", "learning_rate"};
 
   // store the names into a set checker
   private static final Set<String> CONFIG = new HashSet<>(Arrays.asList(CONFIG_VALUES));
@@ -96,14 +98,15 @@ public class Worker implements Runnable {
   private DataSet initialize(Socket connectionToMaster) {
 
     // TODO: get packets from master and sets training data, label, etc.
-    DataSet dataset;
-    try (final ObjectInputStream in = new ObjectInputStream(
-        connectionToMaster.getInputStream())) {
+    DataSet dataset = null;
+    try (final ObjectInputStream in = new ObjectInputStream(connectionToMaster.getInputStream())) {
       info = (WorkerInitInfo) in.readObject();
       float[] data = (float[]) in.readObject();
-      INDArray d = Nd4j.create(data, new int[] {data.length/info.trainingDataWidth,info.trainingDataWidth});
+      INDArray d = Nd4j.create(data,
+          new int[] {data.length / info.trainingDataWidth, info.trainingDataWidth});
       // TODO: work on read into Dataset
-      dataset = new DataSet(d.get(new INDArrayIndex(), ), d.getColumn(0));
+      dataset =
+          new DataSet(d.get(NDArrayIndex.interval(1, info.trainingDataWidth)), d.getColumn(0));
     } catch (IOException e1) {
       e1.printStackTrace();
     } catch (ClassNotFoundException e2) {
