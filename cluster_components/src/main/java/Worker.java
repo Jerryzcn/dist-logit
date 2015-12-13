@@ -1,4 +1,7 @@
+import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.factory.Nd4j;
+import org.nd4j.linalg.indexing.INDArrayIndex;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -19,6 +22,7 @@ public class Worker implements Runnable {
   // name of values from configuration file that worker will store and process
   private static final String[] CONFIG_VALUES = new String[]
       {"log_path", "reg_constant", "batch_size", "learning_rate"};
+
   // store the names into a set checker
   private static final Set<String> CONFIG = new HashSet<>(Arrays.asList(CONFIG_VALUES));
 
@@ -26,6 +30,8 @@ public class Worker implements Runnable {
   private int workerId;
   private boolean isStopped;
   private int tcpPort;
+
+  private WorkerInitInfo info;
 
   public static void main(String args[]) throws Exception {
     if (args.length != 1) {
@@ -69,12 +75,11 @@ public class Worker implements Runnable {
     isStopped = true;
     try (ServerSocket workerSocket = new ServerSocket(tcpPort)) {
       Socket connectionToMaster = workerSocket.accept();
-      Map<InetAddress, ParamServerSettings> paramServers = new HashMap<>();
 
-      // return this dataset
-      DataSet dataset = initialize(connectionToMaster, paramServers);
+      // return this data set
+      DataSet dataset = initialize(connectionToMaster);
       while (!isStopped()) {
-        ModelReplica model = new ModelReplica(paramServers, dataset, hyperParams);
+        ModelReplica model = new ModelReplica(info.paramServerSettingsMap, dataset, hyperParams);
         new Thread(model).start();
         BufferedReader buf =
             new BufferedReader(new InputStreamReader(connectionToMaster.getInputStream()));
@@ -88,37 +93,23 @@ public class Worker implements Runnable {
   }
 
   // Sets relevant information for the worker.
-  private DataSet initialize(Socket connectionToMaster,
-      Map<InetAddress, ParamServerSettings> paramServers) {
+  private DataSet initialize(Socket connectionToMaster) {
+
     // TODO: get packets from master and sets training data, label, etc.
-    try (final BufferedInputStream in = new BufferedInputStream(
+    DataSet dataset;
+    try (final ObjectInputStream in = new ObjectInputStream(
         connectionToMaster.getInputStream())) {
-      // TODO: parse stream check from the
-      int textByteCutoff = 5; // This is a arbitrary number to tell user get from header,
-                              // String first then byte second
-      // used the same logic as @Jerry
-      int res = 0;
-      int totalReadin = 0;
-      byte[] buf = new byte[BUFFER_SIZE];
-      while (in.available() < 1);
-      do {
-        res = in.read(buf);
-        if (res != -1) {
-          totalReadin += res;
-          if (totalReadin < textByteCutoff) {
-            // TODO: parse into text
-          } else {
-            // TODO: parse into byte
-
-          }
-        }
-//        outBuf.flush();
-      } while (res != -1);
-
-    } catch (IOException e) {
-      e.printStackTrace();
+      info = (WorkerInitInfo) in.readObject();
+      float[] data = (float[]) in.readObject();
+      INDArray d = Nd4j.create(data, new int[] {data.length/info.trainingDataWidth,info.trainingDataWidth});
+      // TODO: work on read into Dataset
+      dataset = new DataSet(d.get(new INDArrayIndex(), ), d.getColumn(0));
+    } catch (IOException e1) {
+      e1.printStackTrace();
+    } catch (ClassNotFoundException e2) {
+      e2.printStackTrace();
     }
-    return null;
+    return dataset;
   }
 
 }

@@ -69,19 +69,38 @@ public class Master implements Runnable {
     try (
         final Scanner dataScan = new Scanner(new File(params.get("training_data")))
     ) {
-      // manipulate the training data
-      ArrayList<Float> tempTrainingData = new ArrayList<>(INI_TRAIN_DATA_SIZE);
+
+      // read, shuffle, shard training data.
+      List<String> lineList = new ArrayList<>();
+      while (dataScan.hasNextLine()) {
+        lineList.add(dataScan.nextLine());
+      }
+      Collections.shuffle(lineList);
+
+      int workerSize = workerAddresses.size();
+      int eachWorkerLoad = lineList.size() / workerSize;
+      List<Float>[] dividedData = new ArrayList[workerSize];
 
       String[] lineData = null;
-      if (dataScan.hasNextLine()) {
-        lineData = dataScan.nextLine().split(",");
-        for (int i = 0; i < lineData.length; i++) {
-          tempTrainingData.add(Float.parseFloat(lineData[i]));
+
+      // manipulate the training data
+//      ArrayList<Float> tempTrainingData = new ArrayList<>(INI_TRAIN_DATA_SIZE);
+      int currentWorker = 0;
+      for (int i = 0; i < lineList.size(); i++) {
+        if (i % eachWorkerLoad == 0) {
+          currentWorker = i/eachWorkerLoad;
+          dividedData[currentWorker] = new ArrayList<>();
+        }
+
+        lineData = lineList.get(i).split(",");
+        for (int j = 0; j < lineData.length; j++) {
+          dividedData[currentWorker].add(Float.parseFloat(lineData[j]));
         }
       }
       int trainingDataWidth = lineData.length;
 
-      float[] trainingData = Floats.toArray(tempTrainingData);
+      // convert array list to array
+//      float[] trainingData = Floats.toArray(tempTrainingData);
 
       // divide to to worker
 
@@ -128,23 +147,22 @@ public class Master implements Runnable {
 
       WorkerInitInfo info = new WorkerInitInfo(paramServerSettingsMap, hyperPrams,
           // hyper prams that is obtained from a wrapper object
-          trainingData, // training data that is copied in hacky way
+          // since we divide the data to each worker
+          //trainingData, // training data that is copied in hacky way
           trainingDataWidth // training data width that is obtained in hacky way
       );
 
+
       for (int i = 0; i < workerSockets.size(); i++) {
-        WorkerConnection workerConnection = new WorkerConnection(workerSockets.get(i), info);
+        float[] workerData = Floats.toArray(dividedData[i]);
+
+        WorkerConnection workerConnection = new WorkerConnection(
+            workerSockets.get(i), info, workerData);
         workers.add(workerConnection);
         new Thread(workerConnection).start();
       }
 
-      // TODO: read, shuffle, shard training data.
-      while (dataScan.hasNextLine()) {
-        lineData = dataScan.nextLine().split(",");
-        for (int i = 0; i < lineData.length; i++) {
-          tempTrainingData.add(Float.parseFloat(lineData[i]));
-        }
-      }
+
 
     } catch (IOException e) {
       e.printStackTrace();

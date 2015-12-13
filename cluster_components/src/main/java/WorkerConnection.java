@@ -1,6 +1,7 @@
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.IOException;
+import java.io.ObjectOutputStream;
 import java.net.InetAddress;
 import java.net.Socket;
 
@@ -8,27 +9,24 @@ public class WorkerConnection implements Runnable {
 
     private Socket workerSocket;
     private WorkerInitInfo info;
+    private final float[] dividedData;
 
-    public WorkerConnection(Socket workerSocket, WorkerInitInfo info) {
+    public WorkerConnection(Socket workerSocket, WorkerInitInfo info, float[] dividedData) {
         this.workerSocket = workerSocket;
         this.info = info;
+        this.dividedData = dividedData;
     }
 
     @Override
     public void run() {
 
         try (final BufferedInputStream inBuf = new BufferedInputStream(workerSocket.getInputStream());
-             final BufferedOutputStream outBuf = new BufferedOutputStream(workerSocket.getOutputStream())) {
+             final BufferedOutputStream outBuf = new BufferedOutputStream(workerSocket.getOutputStream());
+            final ObjectOutputStream out = new ObjectOutputStream(workerSocket.getOutputStream())) {
 
-            for (InetAddress address : info.paramServerSettingsMap.keySet()) {
-                ParamServerSettings paramSettings = info.paramServerSettingsMap.get(address);
-                // paramServer address, worker <-> paramServer port number (upPort, downPort)
-                 outBuf.write((address.getAddress() + ":"
-                     + paramSettings.upPort + ":"
-                     + paramSettings.downPort +"\n")
-                     .getBytes());
-            }
-            outBuf.flush();
+            out.writeObject(info);
+            out.writeObject(dividedData);
+            out.flush();
 
         } catch (IOException e) {
             e.printStackTrace();
