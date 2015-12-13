@@ -25,8 +25,8 @@ public class ParamServerSettings {
     private int lowIndex;
     private int highIndex;
 
-    public Builder() {
-
+    public boolean isReadyToBuild() {
+      return upPort != 0 && downPort != 0;
     }
 
     public Builder setUpPort(int upPort) {

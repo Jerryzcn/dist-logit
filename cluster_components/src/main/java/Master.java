@@ -1,5 +1,6 @@
 import com.google.common.primitives.Floats;
-import org.apache.commons.lang3.ArrayUtils;
+import org.nd4j.linalg.api.ndarray.INDArray;
+import org.nd4j.linalg.factory.Nd4j;
 
 import java.io.*;
 import java.net.InetAddress;
@@ -65,80 +66,89 @@ public class Master implements Runnable {
 
   private void init() {
 
-      try (
-          final Scanner dataScan = new Scanner(new File(params.get("training_data")))
-      ) {
-        // manipulate the training data
-        ArrayList<Float> tempTrainingData = new ArrayList<>(INI_TRAIN_DATA_SIZE);
+    try (
+        final Scanner dataScan = new Scanner(new File(params.get("training_data")))
+    ) {
+      // manipulate the training data
+      ArrayList<Float> tempTrainingData = new ArrayList<>(INI_TRAIN_DATA_SIZE);
 
-        String[] lineData = null;
-        while (dataScan.hasNextLine()) {
-          lineData = dataScan.nextLine().split(",");
-          for (int i = 0; i < lineData.length; i++) {
-            tempTrainingData.add(Float.parseFloat(lineData[i]));
-          }
+      String[] lineData = null;
+      if (dataScan.hasNextLine()) {
+        lineData = dataScan.nextLine().split(",");
+        for (int i = 0; i < lineData.length; i++) {
+          tempTrainingData.add(Float.parseFloat(lineData[i]));
         }
-        int trainingDataWidth = lineData.length;
-
-        float[] trainingData = Floats.toArray(tempTrainingData);
-
-        // divide to to worker
-
-        Map<InetAddress, ParamServerSettings> paramServerSettingsMap = new HashMap<>();
-
-
-        ParamServerSettings.Builder[] builders =
-            new ParamServerSettings.Builder[parameterServerAddresses.size()];
-
-        for (int i = 0; i < builders.length; i++) {
-          builders[i] = new ParamServerSettings.Builder();
-        }
-
-        for (int i = 0; i < paramSockets.size(); i++) {
-          ParamServerConnection paramConnection = new ParamServerConnection(
-              builders[i],
-              paramSockets.get(i));
-          parameterServers.add(paramConnection);
-          new Thread(paramConnection).start();
-
-        }
-
-        // TODO: not sure in multi-thread builder will be set properly, add spin lock if behaviour is weird...
-
-        int parameterServerAddressSize = parameterServerAddresses.size();
-        
-        for (int i = 0; i < parameterServerAddressSize; i++) {
-
-          builders[i].setLowIndex(i*trainingDataWidth);
-          builders[i].setHighIndex(2*trainingDataWidth);
-
-          paramServerSettingsMap.put(parameterServerAddresses.get(i).getAddress(),
-              builders[i].build());
-        }
-
-        // set Hyper Params in Config: [0 => learning_rate, 1 => reg_constant, 2 => batch_size]
-        // hard-code it for now, maybe later as well... who knows...
-        float[] hyperPrams = new float[3];
-        hyperPrams[0] = Float.parseFloat(params.get("learning_rate"));
-        hyperPrams[1] = Float.parseFloat(params.get("reg_constant"));
-        hyperPrams[2] = Float.parseFloat(params.get("batch_size"));
-
-        WorkerInitInfo info = new WorkerInitInfo(
-            paramServerSettingsMap,
-            hyperPrams, // hyper prams that is obtained from a wrapper object
-            trainingData, // training data that is copied in hacky way
-            trainingDataWidth // training data width that is obtained in hacky way
-        );
-
-        for (int i = 0; i < workerSockets.size(); i++) {
-          WorkerConnection workerConnection = new WorkerConnection(workerSockets.get(i), info);
-          workers.add(workerConnection);
-          new Thread(workerConnection).start();
-        }
-
-      } catch (IOException e) {
-        e.printStackTrace();
       }
+      int trainingDataWidth = lineData.length;
+
+      float[] trainingData = Floats.toArray(tempTrainingData);
+
+      // divide to to worker
+
+      Map<InetAddress, ParamServerSettings> paramServerSettingsMap = new HashMap<>();
+
+
+      ParamServerSettings.Builder[] builders =
+          new ParamServerSettings.Builder[parameterServerAddresses.size()];
+
+      for (int i = 0; i < builders.length; i++) {
+        builders[i] = new ParamServerSettings.Builder();
+      }
+      int residual = trainingDataWidth % paramSockets.size();
+      int partitionWidth = trainingDataWidth / paramSockets.size();
+      int low = 0;
+      for (int i = 0; i < paramSockets.size(); i++) {
+        ParamServerConnection paramConnection =
+            new ParamServerConnection(builders[i], paramSockets.get(i));
+        parameterServers.add(paramConnection);
+        new Thread(paramConnection).start();
+        builders[i].setLowIndex(low);
+        int high = residual > 0 ? low + partitionWidth + 1 : low + partitionWidth;
+        builders[i].setHighIndex(high);
+        low = high + 1;
+        residual--;
+      }
+
+      int parameterServerAddressSize = parameterServerAddresses.size();
+
+      for (int i = 0; i < parameterServerAddressSize; i++) {
+        while (!builders[i].isReadyToBuild()) {
+          Thread.yield();
+        }
+        paramServerSettingsMap
+            .put(parameterServerAddresses.get(i).getAddress(), builders[i].build());
+      }
+
+      // set Hyper Params in Config: [0 => learning_rate, 1 => reg_constant, 2 => batch_size]
+      // hard-code it for now, maybe later as well... who knows...
+      float[] hyperPrams = new float[3];
+      hyperPrams[0] = Float.parseFloat(params.get("learning_rate"));
+      hyperPrams[1] = Float.parseFloat(params.get("reg_constant"));
+      hyperPrams[2] = Float.parseFloat(params.get("batch_size"));
+
+      WorkerInitInfo info = new WorkerInitInfo(paramServerSettingsMap, hyperPrams,
+          // hyper prams that is obtained from a wrapper object
+          trainingData, // training data that is copied in hacky way
+          trainingDataWidth // training data width that is obtained in hacky way
+      );
+
+      for (int i = 0; i < workerSockets.size(); i++) {
+        WorkerConnection workerConnection = new WorkerConnection(workerSockets.get(i), info);
+        workers.add(workerConnection);
+        new Thread(workerConnection).start();
+      }
+
+      // TODO: read, shuffle, shard training data.
+      while (dataScan.hasNextLine()) {
+        lineData = dataScan.nextLine().split(",");
+        for (int i = 0; i < lineData.length; i++) {
+          tempTrainingData.add(Float.parseFloat(lineData[i]));
+        }
+      }
+
+    } catch (IOException e) {
+      e.printStackTrace();
+    }
   }
 
   @Override public void run() {
@@ -146,8 +156,7 @@ public class Master implements Runnable {
         final Socket clientSocket = clientServer.accept();
         final BufferedReader inBuf = new BufferedReader(
             new InputStreamReader(clientSocket.getInputStream()));
-        final BufferedOutputStream outBuf = new BufferedOutputStream(
-            clientSocket.getOutputStream());
+        final BufferedOutputStream outBuf = new BufferedOutputStream(clientSocket.getOutputStream())
     ) {
       String line;
       boolean readHeader = true;
