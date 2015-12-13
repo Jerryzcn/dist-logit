@@ -1,3 +1,4 @@
+import org.apache.log4j.Logger;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.indexing.NDArrayIndex;
@@ -16,6 +17,9 @@ import java.util.concurrent.Executors;
  */
 public class ModelReplica implements Runnable {
   private static final int NUM_OF_THREADS = 6;
+
+  private static Logger logger = Logger.getLogger(ModelReplica.class);
+
   private final Map<InetAddress, ParamServerSettings> paramServers;
   private boolean isStopped;
   private final DataSet dataset;
@@ -60,7 +64,7 @@ public class ModelReplica implements Runnable {
           lossGrad = sgd.getUpdate(w);
         }
 
-        System.out.println(lossGrad);
+        logger.info(lossGrad);
 
         i = 0;
         for (InetAddress address : paramServers.keySet()) {

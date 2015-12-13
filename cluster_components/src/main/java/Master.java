@@ -1,4 +1,5 @@
 import com.google.common.primitives.Floats;
+import org.apache.log4j.BasicConfigurator;
 import org.apache.log4j.Logger;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.factory.Nd4j;
@@ -63,14 +64,15 @@ public class Master implements Runnable {
   private void init() {
 
     try (final Scanner dataScan = new Scanner(new File(params.get("training_data")))) {
-
       // read, shuffle, shard training data.
       List<String> lineList = new ArrayList<>(INIT_TRAIN_DATA_SIZE);
+      logger.info("start reading training data.");
       while (dataScan.hasNextLine()) {
         lineList.add(dataScan.nextLine());
       }
+      logger.info("training data loaded. Start shuffle");
       Collections.shuffle(lineList);
-
+      logger.info("shuffle finished");
       int workerSize = workerAddresses.size();
       int eachWorkerLoad = lineList.size() / workerSize;
       List<Float>[] dividedData = new ArrayList[workerSize];
@@ -92,6 +94,8 @@ public class Master implements Runnable {
         }
       }
       int trainingDataWidth = lineData.length;
+      logger
+          .info("sharding finished. the length of an example (with label) is " + trainingDataWidth);
 
       // convert array list to array
       //      float[] trainingData = Floats.toArray(tempTrainingData);
@@ -99,7 +103,6 @@ public class Master implements Runnable {
       // divide to to worker
 
       Map<InetAddress, ParamServerSettings> paramServerSettingsMap = new HashMap<>();
-
 
       ParamServerSettings.Builder[] builders =
           new ParamServerSettings.Builder[parameterServerAddresses.size()];
@@ -112,9 +115,9 @@ public class Master implements Runnable {
       int low = 0;
       for (int i = 0; i < paramSockets.size(); i++) {
         ParamServerConnection paramConnection =
-            new ParamServerConnection(builders[i], paramSockets.get(i));
+            new ParamServerConnection(builders[i], paramSockets.get(i), trainingDataWidth);
         parameterServers.add(paramConnection);
-        new Thread(paramConnection).start();
+        new Thread(paramConnection).run();
         builders[i].setLowIndex(low);
         int high = residual > 0 ? low + partitionWidth + 1 : low + partitionWidth;
         builders[i].setHighIndex(high);
@@ -154,11 +157,8 @@ public class Master implements Runnable {
         workers.add(workerConnection);
         new Thread(workerConnection).start();
       }
-
-
-
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.fatal(e);
     }
   }
 
@@ -173,28 +173,26 @@ public class Master implements Runnable {
       logger.info("client connected");
       String line;
       boolean readHeader = true;
-      while ((line = inBuf.readLine()) != null) {
-        if (readHeader) {
-          int pos = line.indexOf('=');
-          if (pos != -1) {
-            String param = line.substring(0, pos);
-            String value = line.substring(pos + 1);
-            if (param.equals("worker")) {
-              workerAddresses.add(NetworkUtil.getAddress(value));
-            } else if (param.equals("parameter_server")) {
-              parameterServerAddresses.add(NetworkUtil.getAddress(value));
-            } else
-              params.put(param, value);
-          } else if (line.equals("header_end")) {
-            readHeader = false;
-          }
+      while (readHeader && (line = inBuf.readLine()) != null) {
+        int pos = line.indexOf('=');
+        if (pos != -1) {
+          String param = line.substring(0, pos).trim();
+          String value = line.substring(pos + 1).trim();
+          if (param.equals("worker")) {
+            workerAddresses.add(NetworkUtil.getAddress(value));
+          } else if (param.equals("parameter_server")) {
+            parameterServerAddresses.add(NetworkUtil.getAddress(value));
+          } else
+            params.put(param, value);
+        } else if (line.equals("header_end")) {
+          readHeader = false;
         }
       }
+      logger.info("configuration file read.");
 
       for (InetSocketAddress worker : workerAddresses) {
         workerSockets.add(new Socket(worker.getAddress(), worker.getPort()));
       }
-
       for (InetSocketAddress param : parameterServerAddresses) {
         paramSockets.add(new Socket(param.getAddress(), param.getPort()));
       }
@@ -222,6 +220,7 @@ public class Master implements Runnable {
   }
 
   public static void main(String args[]) {
+    BasicConfigurator.configure();
     int port = 31415;
     if (args.length > 0) {
       port = Integer.parseInt(args[0]);

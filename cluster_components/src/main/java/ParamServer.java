@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import java.io.*;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -17,6 +19,8 @@ public class ParamServer implements Runnable {
 
   private final ServerSocket masterSocket;
 
+  private static Logger logger = Logger.getLogger(ParamServer.class);
+
   private Map<InetAddress, Integer> workers;
   private float[] parameters;
   private boolean isStopped;
@@ -32,7 +36,7 @@ public class ParamServer implements Runnable {
     try {
       paramServer = new ParamServer(port);
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.fatal(e);
     }
     paramServer.run();
   }
@@ -58,27 +62,31 @@ public class ParamServer implements Runnable {
         final BufferedReader inBuf = new BufferedReader(
             new InputStreamReader(masterConnection.getInputStream()));
         final BufferedOutputStream outBuf = new BufferedOutputStream(
-            masterConnection.getOutputStream());
-        final ParameterUpdater paramUpdaters = new ParameterUpdater(parameters);
-        final PullHandler pullHandler = new PullHandler(parameters)) {
-      int pushPort = paramUpdaters.getLocalPort();
-      int pullPort = pullHandler.getLocalPort();
-      initialize(inBuf, outBuf, pushPort, pullPort);
-      outBuf.write(Message.INITIALIZED.getBytes("UTF-8"));
-      outBuf.flush();
-      new Thread(paramUpdaters).start();
-      while (!isStopped()) {
-        // TODO: communicate with master.
-        String command = inBuf.readLine();
-        switch (command) {
-          case Message.STOP:
-            stop();
-          case Message.GET_WEIGHT:
-            getWeight(outBuf);
+            masterConnection.getOutputStream())) {
+      int paramLength = Integer.parseInt(inBuf.readLine());
+      parameters = new float[paramLength];
+      try (
+          final ParameterUpdater paramUpdaters = new ParameterUpdater(parameters);
+          final PullHandler pullHandler = new PullHandler(parameters)) {
+        int pushPort = paramUpdaters.getLocalPort();
+        int pullPort = pullHandler.getLocalPort();
+        respondToMaster(inBuf, outBuf, pushPort, pullPort);
+        outBuf.write(Message.INITIALIZED.getBytes("UTF-8"));
+        outBuf.flush();
+        new Thread(paramUpdaters).start();
+        while (!isStopped()) {
+          // TODO: communicate with master.
+          String command = inBuf.readLine();
+          switch (command) {
+            case Message.STOP:
+              stop();
+            case Message.GET_WEIGHT:
+              getWeight(outBuf);
+          }
         }
       }
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.fatal(e);
     }
   }
 
@@ -92,11 +100,11 @@ public class ParamServer implements Runnable {
     try {
       masterSocket.close();
     } catch (IOException e) {
-      e.printStackTrace();
+      logger.fatal(e);
     }
   }
 
-  private void initialize(BufferedReader inBuf, BufferedOutputStream outBuf, int pushPort,
+  private void respondToMaster(BufferedReader inBuf, BufferedOutputStream outBuf, int pushPort,
       int pullPort) throws IOException {
     // TODO: setup connection with workers.
     ByteBuffer outToMaster = ByteBuffer.allocate(BUFFER_SIZE);

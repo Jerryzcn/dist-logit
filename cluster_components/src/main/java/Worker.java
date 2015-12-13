@@ -1,3 +1,4 @@
+import org.apache.log4j.BasicConfigurator;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
@@ -25,6 +26,7 @@ public class Worker implements Runnable {
   private WorkerInitInfo info;
 
   public static void main(String args[]) throws Exception {
+    BasicConfigurator.configure();
     if (args.length != 1) {
       printUsage();
       return;
