@@ -76,34 +76,28 @@ public class Master implements Runnable {
       Collections.shuffle(lineList, new Random(System.currentTimeMillis()));
       logger.info("shuffle finished");
       int workerSize = workerAddresses.size();
-      int eachWorkerLoad = lineList.size() / workerSize;
+
       List<Float>[] dividedData = new ArrayList[workerSize];
 
       String[] lineData = null;
 
       // manipulate the training data
-      //      ArrayList<Float> tempTrainingData = new ArrayList<>(INI_TRAIN_DATA_SIZE);
-      int currentWorker = 0;
       for (int i = 0; i < lineList.size(); i++) {
-        if (i % eachWorkerLoad == 0) {
-          currentWorker = i / eachWorkerLoad;
-          dividedData[currentWorker] = new ArrayList<>();
-        }
+
+        int currentWorker = i % workerSize;
+        if (dividedData[currentWorker] == null) dividedData[currentWorker] = new ArrayList<>();
 
         lineData = lineList.get(i).split(",");
         for (int j = 0; j < lineData.length; j++) {
           dividedData[currentWorker].add(Float.parseFloat(lineData[j]));
         }
+
       }
       int trainingDataWidth = lineData.length;
       logger
           .info("sharding finished. the length of an example (with label) is " + trainingDataWidth);
 
-      // convert array list to array
-      //      float[] trainingData = Floats.toArray(tempTrainingData);
-
       // divide to to worker
-
       Map<InetAddress, ParamServerSettings> paramServerSettingsMap = new HashMap<>();
 
       ParamServerSettings.Builder[] builders =
@@ -147,7 +141,6 @@ public class Master implements Runnable {
       WorkerInitInfo info = new WorkerInitInfo(paramServerSettingsMap, hyperPrams,
           // hyper prams that is obtained from a wrapper object
           // since we divide the data to each worker
-          //trainingData, // training data that is copied in hacky way
           trainingDataWidth // training data width that is obtained in hacky way
       );
 
