@@ -91,6 +91,7 @@ public class ParamServer implements Runnable {
             }
           }
         }
+        getWeight(outBuf);
       }
     } catch (IOException e) {
       logger.fatal(e.getStackTrace());

@@ -85,7 +85,8 @@ public class Master implements Runnable {
       for (int i = 0; i < lineList.size(); i++) {
 
         int currentWorker = i % workerSize;
-        if (dividedData[currentWorker] == null) dividedData[currentWorker] = new ArrayList<>();
+        if (dividedData[currentWorker] == null)
+          dividedData[currentWorker] = new ArrayList<>();
 
         lineData = lineList.get(i).split(",");
         for (int j = 0; j < lineData.length; j++) {
@@ -113,7 +114,7 @@ public class Master implements Runnable {
         ParamServerConnection paramConnection =
             new ParamServerConnection(builders[i], paramSockets.get(i), trainingDataWidth);
         parameterServers.add(paramConnection);
-        new Thread(paramConnection).run();
+        new Thread(paramConnection).start();
         builders[i].setLowIndex(low);
         int high = residual > 0 ? low + partitionWidth : low + partitionWidth - 1;
         builders[i].setHighIndex(high);
@@ -208,6 +209,8 @@ public class Master implements Runnable {
   }
 
   public void stop() {
+    workers.stream().forEach(WorkerConnection::stop);
+    parameterServers.stream().forEach(ParamServerConnection::stop);
     isStopped = true;
   }
 

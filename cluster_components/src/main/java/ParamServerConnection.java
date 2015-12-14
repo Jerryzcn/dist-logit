@@ -32,7 +32,7 @@ public class ParamServerConnection implements Runnable {
       outBuf.write(("" + paramLength + "\n").getBytes("UTF-8"));
       outBuf.flush();
       logger.info("parameter vector length: " + paramLength);
-      byte[] buf = new byte[NetworkUtil.INT_SIZE];
+      byte[] buf = new byte[NetworkUtil.INT_SIZE * 2];
       inBuf.read(buf);
       ByteBuffer buffer = ByteBuffer.wrap(buf);
       int upPort = buffer.getInt();
