@@ -54,7 +54,7 @@ public class StochasticGradientDescent implements DenseOptimizer {
     long t = System.currentTimeMillis();
     DataSet dataset = dataSets.get(batchIndex);
     LossGrad result =
-        lossFunction.compute(dataset.getFeatures(), dataset.getLabels(), weights, lambda);
+        lossFunction.compute(dataset.getFeatureMatrix(), dataset.getLabels(), weights, lambda);
     logger.info(System.currentTimeMillis() - t);
     result.gradient.muli(learningRate);
     return result;

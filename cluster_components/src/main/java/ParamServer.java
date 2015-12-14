@@ -81,6 +81,8 @@ public class ParamServer implements Runnable {
         logger.info("parameter updater and pull handler started.");
         while (!isStopped()) {
           // communicate with master.
+          logger.info(parameters);
+          Thread.sleep(1000); 
           String command = inBuf.readLine();
           if (command != null) {
             switch (command) {
@@ -92,6 +94,8 @@ public class ParamServer implements Runnable {
           }
         }
         getWeight(outBuf);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
       }
     } catch (IOException e) {
       logger.fatal(e.getStackTrace());
