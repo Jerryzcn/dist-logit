@@ -73,7 +73,7 @@ public class Master implements Runnable {
         lineList.add(dataScan.nextLine());
       }
       logger.info("training data loaded. Start shuffle");
-      Collections.shuffle(lineList);
+      Collections.shuffle(lineList, new Random(System.currentTimeMillis()));
       logger.info("shuffle finished");
       int workerSize = workerAddresses.size();
       int eachWorkerLoad = lineList.size() / workerSize;
