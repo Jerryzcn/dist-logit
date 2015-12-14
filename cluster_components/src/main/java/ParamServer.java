@@ -82,7 +82,7 @@ public class ParamServer implements Runnable {
         while (!isStopped()) {
           // communicate with master.
           logger.info(parameters);
-          Thread.sleep(1000); 
+          Thread.sleep(1000);
           String command = inBuf.readLine();
           if (command != null) {
             switch (command) {

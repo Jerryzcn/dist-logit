@@ -25,19 +25,13 @@ public class L2RegLogisticDenseLoss implements DenseLossFunction {
   @Override public LossGrad compute(INDArray X, INDArray Y, float[] weights, float lambda) {
     int batchSize = Y.length();
     INDArray w = Nd4j.create(weights).transposei();
-    long t = System.currentTimeMillis();
     INDArray activation = sigmoid(X.mmul(w));
-    logger.info("calculate activation: " + (System.currentTimeMillis() - t));
     INDArray noBiasW = w.get(NDArrayIndex.interval(1, w.length()));
     INDArray squaredW = noBiasW.mul(noBiasW);
-    t = System.currentTimeMillis();
     INDArray loss =
         sum(Y.neg().muli(log(activation)).subi((Y.rsub(1)).muli(log(activation.rsub(1)))))
             .muli(1.0 / batchSize).addi(sum(squaredW).muli(lambda / 2.0 / batchSize));
-    logger.info("calculate loss: " + (System.currentTimeMillis() - t));
-    t = System.currentTimeMillis();
     INDArray tmp = activation.sub(Y).transposei().mmul(X).muli(1.0 / batchSize);
-    logger.info("calculate gradient: " + (System.currentTimeMillis() - t));
     INDArray biasGradient = tmp.getScalar(0);
     INDArray regularizedGrad =
         tmp.get(NDArrayIndex.interval(1, w.length())).addi(noBiasW.muli(lambda / batchSize));
