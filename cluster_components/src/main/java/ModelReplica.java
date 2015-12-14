@@ -67,7 +67,7 @@ public class ModelReplica implements Runnable {
           lossGrad = sgd.getUpdate(w);
         }
 
-        logger.info(lossGrad);
+        logger.info(lossGrad.loss);
 
         i = 0;
         for (InetAddress address : paramServers.keySet()) {

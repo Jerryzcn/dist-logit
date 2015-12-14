@@ -121,7 +121,7 @@ public class Master implements Runnable {
         parameterServers.add(paramConnection);
         new Thread(paramConnection).run();
         builders[i].setLowIndex(low);
-        int high = residual > 0 ? low + partitionWidth + 1 : low + partitionWidth;
+        int high = residual > 0 ? low + partitionWidth : low + partitionWidth - 1;
         builders[i].setHighIndex(high);
         low = high + 1;
         residual--;
