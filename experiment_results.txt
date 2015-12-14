@@ -1,0 +1,152 @@
+training_data = HIGGS_train.csv
+eval_data = HIGGS_test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.0
+batch_size = 100000
+learning_rate = 0.1
+worker = 169.254.205.88:12345
+worker = 169.254.209.120:12345
+parameter_server = 169.254.205.88:13456
+parameter_server = 169.254.209.120:13456
+
+
+==== Experiment 1 ====
+training_data = HIGGS_train.csv
+eval_data = HIGGS_test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.0
+batch_size = 100000
+learning_rate = 0.1
+worker = 169.254.205.88:12345
+parameter_server = 169.254.209.120:13456
+
+
+results:
+time: 722791 - 46792 = 675999
+loss: 0.6529
+
+==== Experiment 2 ====
+training_data = HIGGS_train.csv
+eval_data = HIGGS_test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.0
+batch_size = 100000
+learning_rate = 0.1
+worker = 169.254.205.88:12345
+worker = 169.254.209.120:12345
+parameter_server = 169.254.209.120:13456
+
+results:
+time: 327260 - 45256 = 282004
+loss: 0.6529833
+
+==== Experiment 3 ====
+training_data = HIGGS_train.csv
+eval_data = HIGGS_test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.0
+batch_size = 100000
+learning_rate = 0.1
+worker = 169.254.205.88:12345
+worker = 169.254.209.120:12345
+parameter_server = 169.254.205.88:13456
+parameter_server = 169.254.209.120:13456
+
+result:
+time: 540158 - 59012 = 481146
+loss: 0.65298384
+
+==== Experiment 4 ====
+training_data = HIGGS_train.csv
+eval_data = HIGGS_test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.0
+batch_size = 100000
+learning_rate = 0.1
+worker = 169.254.205.88:12345
+worker = 169.254.205.88:12346
+worker = 169.254.209.120:12345
+parameter_server = 169.254.209.120:13456
+
+result:
+time: 224723 - 48238 = 176485
+loss: 0.6529809
+
+==== Experiment 5 ====
+training_data = HIGGS_train.csv
+eval_data = HIGGS_test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.0
+batch_size = 100000
+learning_rate = 0.1
+worker = 169.254.205.88:12345
+worker = 169.254.205.88:12346
+worker = 169.254.209.120:12345
+parameter_server = 169.254.209.120:13456
+parameter_server = 169.254.205.88:13456
+
+result:
+time: 348236 - 45908 = 302328
+loss: 0.6529955
+
+==== Experiment 6 ====
+training_data = HIGGS_train.csv
+eval_data = HIGGS_test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.0
+batch_size = 100000
+learning_rate = 0.1
+worker = 169.254.205.88:12345
+worker = 169.254.205.88:12346
+worker = 169.254.209.120:12345
+worker = 169.254.209.120:12346
+parameter_server = 169.254.205.88:13456
+
+result:
+time: 399540 - 44409 = 355131
+loss: 0.6529809
+
+==== Experiment 7 ====
+training_data = HIGGS_train.csv
+eval_data = HIGGS_test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.0
+batch_size = 100000
+learning_rate = 0.1
+worker = 169.254.205.88:12345
+worker = 169.254.205.88:12346
+worker = 169.254.209.120:12345
+worker = 169.254.209.120:12346
+parameter_server = 169.254.205.88:13456
+parameter_server = 169.254.209.120:13456
+
+result:
+time: 337766 - 46751 = 291015
+loss: 0.65299195
+
+==== Experiment 8 ====
+training_data = HIGGS_train.csv
+eval_data = HIGGS_test.csv
+model_output = ~/
+log_path = ~/log
+reg_constant = 0.0
+batch_size = 100000
+learning_rate = 0.1
+worker = 169.254.205.88:12345
+worker = 169.254.205.88:12346
+worker = 169.254.209.120:12345
+parameter_server = 169.254.205.88:13456
+
+
+result:
+time: 323732 - 46761 = 276971
+loss: 0.65299404
+
