@@ -70,6 +70,7 @@ public class Worker implements Runnable {
       ModelReplica model =
           new ModelReplica(info.paramServerSettingsMap, dataset, info.hyperParameters);
       new Thread(model).start();
+      logger.info("model start.");
 
       while (!isStopped()) {
         String command = buf.readLine();

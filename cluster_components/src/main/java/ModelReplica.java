@@ -31,14 +31,14 @@ public class ModelReplica implements Runnable {
       float[] hyperParams) {
     this.dataset = dataset;
     isStopped = true;
-    w = new float[dataset.getFeatures().columns()];
+    w = new float[dataset.getFeatures().columns() + 1]; // +1 for bias term
     this.paramServers = paramServers;
     this.pool = Executors.newFixedThreadPool(NUM_OF_THREADS);
     this.hyperParams = hyperParams;
   }
 
   @Override public void run() {
-    isStopped = true;
+    isStopped = false;
     // TODO: connect to parameter servers with new threads using shared local params.
     ParameterPuller[] pullers = new ParameterPuller[paramServers.size()];
     int i = 0;
@@ -51,14 +51,17 @@ public class ModelReplica implements Runnable {
     for (ParameterPuller puller : pullers) {
       pool.execute(puller);
     }
+    logger.info("parameter puller started.");
     StochasticGradientDescent sgd =
         new StochasticGradientDescent(new L2RegLogisticDenseLoss(), dataset, hyperParams);
+    logger.info("optimizer initialized.");
     LossGrad lossGrad;
     DatagramSocket[] sockets = new DatagramSocket[paramServers.size()];
     try {
       for (i = 0; i < sockets.length; i++) {
         sockets[i] = new DatagramSocket();
       }
+      logger.info("connections to parameter servers established.");
       while (!isStopped()) {
         synchronized (w) {
           lossGrad = sgd.getUpdate(w);
@@ -77,6 +80,7 @@ public class ModelReplica implements Runnable {
           update.setVector(grad);
           pool.execute(new GradientPusher(update, sockets[i], address, settings.upPort));
           i++;
+          Thread.yield();
         }
       }
     } catch (SocketException e) {

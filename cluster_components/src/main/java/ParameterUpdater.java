@@ -8,7 +8,7 @@ import java.net.SocketException;
 
 /** Update the parameters in parameter servers */
 public class ParameterUpdater implements Runnable, Closeable {
-  private static final long TIME_BOUND = 1000L;
+  private static final long TIME_BOUND = 500L;
 
   private static Logger logger = Logger.getLogger(ParameterUpdater.class);
 
@@ -27,7 +27,7 @@ public class ParameterUpdater implements Runnable, Closeable {
 
   @Override public void run() {
     isStopped = false;
-    byte[] buf = new byte[gradient.size()];
+    byte[] buf = new byte[gradient.size() + 1];
     while (!isStopped()) {
       try {
         socket.receive(new DatagramPacket(buf, buf.length));
@@ -35,8 +35,11 @@ public class ParameterUpdater implements Runnable, Closeable {
         if (!isStale(gradient)) {
           float[] update = gradient.getVector();
           for (int i = 0; i < update.length; i++) {
-            parameters[i] = update[i];
+            parameters[i] -= update[i];
           }
+          logger.info("parameters updated.");
+        } else {
+          logger.info("update staled.");
         }
       } catch (SocketException e) {
         logger.fatal(e);
@@ -49,7 +52,7 @@ public class ParameterUpdater implements Runnable, Closeable {
   }
 
   public boolean isStale(DenseNetworkVector vector) {
-    return System.currentTimeMillis() - vector.getTimestamp() < TIME_BOUND;
+    return System.currentTimeMillis() - vector.getTimestamp() > TIME_BOUND;
   }
 
   public int getLocalPort() {

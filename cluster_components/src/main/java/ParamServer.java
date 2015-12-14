@@ -70,12 +70,15 @@ public class ParamServer implements Runnable {
       try (
           final ParameterUpdater paramUpdaters = new ParameterUpdater(parameters);
           final PullHandler pullHandler = new PullHandler(parameters)) {
+        logger.info("parameter updater and pull handler initialized");
         int pushPort = paramUpdaters.getLocalPort();
         int pullPort = pullHandler.getLocalPort();
         respondToMaster(inBuf, outBuf, pushPort, pullPort);
         outBuf.write(Message.INITIALIZED.getBytes("UTF-8"));
         outBuf.flush();
         new Thread(paramUpdaters).start();
+        new Thread(pullHandler).start();
+        logger.info("parameter updater and pull handler started.");
         while (!isStopped()) {
           // communicate with master.
           String command = inBuf.readLine();

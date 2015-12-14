@@ -203,8 +203,10 @@ public class Master implements Runnable {
       logger.info("initialization finished.");
       while (!isStopped()) {
         String command = inBuf.readLine();
-        if (command.equals(Message.STOP)) {
-          stop();
+        if (command != null) {
+          if (command.equals(Message.STOP)) {
+            stop();
+          }
         }
       }
     } catch (IOException e) {

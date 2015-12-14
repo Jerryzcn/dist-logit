@@ -7,7 +7,7 @@ import java.net.SocketException;
 /** Handles pull requests from workers */
 public class PullHandler implements Runnable, Closeable {
 
-  private static final int BUFFER_SIZE = 1;
+  private static final int BUFFER_SIZE = 2;
   public static final byte VALID_REQUEST = 7;
 
   private DenseNetworkVector weights;
@@ -29,7 +29,6 @@ public class PullHandler implements Runnable, Closeable {
         DatagramPacket request = new DatagramPacket(buf, buf.length);
         socket.receive(request);
         if (buf[0] == VALID_REQUEST) {
-          //TODO: Handle Request
           vector.setVector(parameters);
           socket.send(new DatagramPacket(vector.getBytes(), vector.size(), request.getAddress(),
               request.getPort()));

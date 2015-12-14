@@ -1,3 +1,5 @@
+import org.apache.log4j.Logger;
+
 import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
@@ -9,6 +11,8 @@ import java.net.SocketException;
  */
 public class ParameterPuller implements Runnable {
   private final static byte[] REQUEST = new byte[] {PullHandler.VALID_REQUEST};
+
+  private static Logger logger = Logger.getLogger(ParameterPuller.class);
 
   private final InetAddress address;
   private final int port;
