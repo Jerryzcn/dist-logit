@@ -60,7 +60,7 @@ public class StochasticGradientDescent implements DenseOptimizer {
     INDArray labels = dataset.getLabels();
     List<DataSet> miniBatches = new ArrayList<>(numOfBatches);
     for (int i = 0; i < numOfExamples; i += num) {
-      INDArrayIndex indexes = NDArrayIndex.interval(i, i < numOfExamples ? i + num : numOfExamples);
+      INDArrayIndex indexes = NDArrayIndex.interval(i, i + num < numOfExamples ? i + num : numOfExamples);
       miniBatches.add(new DataSet(features.get(indexes, NDArrayIndex.all()),
           labels.get(indexes, NDArrayIndex.all())));
     }
