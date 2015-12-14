@@ -1,5 +1,6 @@
 import org.junit.Before;
 import org.junit.Test;
+import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
 import org.nd4j.linalg.factory.Nd4j;
 
@@ -31,15 +32,19 @@ public class L2RegLogisticDenseLossTest {
 
   @Test public void testL2Loss() {
     float[] weights = TEST_WEIGHTS;
-    LossGrad result = testLoss.compute(dataset, weights, LAMBDA);
+    INDArray Y = dataset.getLabels();
+    INDArray X = Nd4j.concat(1, Nd4j.ones(Y.length(), 1), dataset.getFeatureMatrix());
+    LossGrad result = testLoss.compute(X, Y, weights, LAMBDA);
     assertEquals(TEST_LOSS, result.loss, FLOAT_TOLERANCE);
   }
 
   @Test public void testL2Grad() {
     float[] weights = TEST_WEIGHTS.clone();
     LossGrad result = null;
+    INDArray Y = dataset.getLabels();
+    INDArray X = Nd4j.concat(1, Nd4j.ones(Y.length(), 1), dataset.getFeatureMatrix());
     for (int i = 0; i < ITERATION; i++) {
-      result = testLoss.compute(dataset, weights, LAMBDA);
+      result = testLoss.compute(X, Y, weights, LAMBDA);
       for (int j = 0; j < weights.length; j++) {
         weights[j] = weights[j] - LEARNING_RATE * result.gradient.getFloat(j);
       }

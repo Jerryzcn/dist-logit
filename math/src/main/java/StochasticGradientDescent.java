@@ -1,6 +1,7 @@
 import org.apache.log4j.Logger;
 import org.nd4j.linalg.api.ndarray.INDArray;
 import org.nd4j.linalg.dataset.DataSet;
+import org.nd4j.linalg.factory.Nd4j;
 import org.nd4j.linalg.indexing.INDArrayIndex;
 import org.nd4j.linalg.indexing.NDArrayIndex;
 
@@ -34,7 +35,9 @@ public class StochasticGradientDescent implements DenseOptimizer {
    */
   public StochasticGradientDescent(DenseLossFunction lossFunction, DataSet dataset,
       float[] hyperParams) {
-    this.dataSets = batchBy(dataset, (int) hyperParams[BATCH_SIZE]);
+    INDArray Y = dataset.getLabels();
+    INDArray X = Nd4j.concat(1, Nd4j.ones(Y.length(), 1), dataset.getFeatureMatrix());
+    this.dataSets = batchBy(new DataSet(X, Y), (int) hyperParams[BATCH_SIZE]);
     this.learningRate = hyperParams[LEARNING_RATE];
     this.lossFunction = lossFunction;
     this.lambda = hyperParams[REG_CONSTANT];
@@ -48,7 +51,11 @@ public class StochasticGradientDescent implements DenseOptimizer {
     if (batchIndex >= dataSets.size()) {
       batchIndex = 0;
     }
-    LossGrad result = lossFunction.compute(dataSets.get(batchIndex), weights, lambda);
+    long t = System.currentTimeMillis();
+    DataSet dataset = dataSets.get(batchIndex);
+    LossGrad result =
+        lossFunction.compute(dataset.getFeatures(), dataset.getLabels(), weights, lambda);
+    logger.info(System.currentTimeMillis() - t);
     result.gradient.muli(learningRate);
     return result;
   }
@@ -60,7 +67,8 @@ public class StochasticGradientDescent implements DenseOptimizer {
     INDArray labels = dataset.getLabels();
     List<DataSet> miniBatches = new ArrayList<>(numOfBatches);
     for (int i = 0; i < numOfExamples; i += num) {
-      INDArrayIndex indexes = NDArrayIndex.interval(i, i + num < numOfExamples ? i + num : numOfExamples);
+      INDArrayIndex indexes =
+          NDArrayIndex.interval(i, i + num < numOfExamples ? i + num : numOfExamples);
       miniBatches.add(new DataSet(features.get(indexes, NDArrayIndex.all()),
           labels.get(indexes, NDArrayIndex.all())));
     }
